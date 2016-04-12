@@ -13,12 +13,19 @@ setup(
 	long_description = readme,
 	license = 'GNU General Public License v3 or later (GPLv3+)',
     py_modules = [
-        "somutils"
+        "sheetfetcher",
+        "dbutils",
+        'namespace',
         ],
 	scripts=[
         'activate_wrapper.sh',
+        "sql2csv.py",
 		],
 	install_requires=[
+        'psycopg2',
+        'consolemsg',
+        'gspread',
+        'config',
 	],
 	classifiers = [
 		'Programming Language :: Python',
