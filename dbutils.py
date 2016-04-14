@@ -6,7 +6,7 @@ except ImportError:
 	config=None
 
 
-from namespace import namespace as ns
+from yamlns import namespace as ns
 def fetchNs(cursor):
 	"""Wraps a database cursor so that instead of providing data
 	as arrays, it provides objects with attributes named
