@@ -23,9 +23,13 @@ themselves to have their own repository.
 ``venv`` script
 ---------------
 
+This script is useful to run Python scripts under a given virtual
+environment. It is specially useful to run Python scripts from crontab
+lines.
+
 .. code:: bash
 
-    usage: venv PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
+    usage: venv /PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
 
 ``sql2csv.py`` script
 ---------------------
