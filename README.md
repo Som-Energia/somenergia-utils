@@ -5,7 +5,7 @@ ubiquiously used on scripts in SomEnergia cooperative
 but with no entity by themselves to have their own repository.
 
 
-- `activate_wrapper.sh`: run a command under a Python virtual enviroment
+- `venv`: run a command under a Python virtual enviroment
 - `sql2csv.py`: script to run parametrized sql queries and get the result as (tab separated) csv.
 - `dbutils.py`: module with db related functions
 	- `fetchNs`: a generator that wraps db cursors to fetch objects with attributes instead of psycopg arrays
@@ -13,12 +13,10 @@ but with no entity by themselves to have their own repository.
 	- `csvTable`: turns the results of a query into a tab separated table with proper header names
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 
-## `activate_wrapper.sh` script
-
-You have to set an environment variable VIRTUALENV\_PATH as the folder where the VIRTUALENV is located.
+## `venv` script
 
 ```bash
-usage: activate_wrapper.sh COMMAND [PARAM1 [PARAM2...]]
+usage: venv PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
 ```
 
 ## `sql2csv.py` script

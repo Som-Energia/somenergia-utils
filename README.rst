@@ -5,8 +5,7 @@ This module includes different Python modules and scripts ubiquiously
 used on scripts in SomEnergia cooperative but with no entity by
 themselves to have their own repository.
 
--  ``activate_wrapper.sh``: run a command under a Python virtual
-   enviroment
+-  ``venv``: run a command under a Python virtual enviroment
 -  ``sql2csv.py``: script to run parametrized sql queries and get the
    result as (tab separated) csv.
 -  ``dbutils.py``: module with db related functions
@@ -21,15 +20,12 @@ themselves to have their own repository.
 -  ``sheetfetcher.py``: convenience class to retrieve data from gdrive
    spreadshets
 
-``activate_wrapper.sh`` script
-------------------------------
-
-You have to set an environment variable VIRTUALENV\_PATH as the folder
-where the VIRTUALENV is located.
+``venv`` script
+---------------
 
 .. code:: bash
 
-    usage: activate_wrapper.sh COMMAND [PARAM1 [PARAM2...]]
+    usage: venv PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
 
 ``sql2csv.py`` script
 ---------------------
