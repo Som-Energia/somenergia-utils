@@ -5,7 +5,7 @@ readme = open("README.rst").read()
 
 setup(
     name = "somutils",
-    version = "1.0",
+    version = "1.1",
     description = "Tools we use at Somenergia and can be useful",
     author = "César López Ramírez",
     author_email = "cesar.lopez@somenergia.coop",
@@ -17,8 +17,9 @@ setup(
         "dbutils",
         ],
     scripts=[
+        'venv',
         'activate_wrapper.sh',
-        "sql2csv.py",
+        'sql2csv.py',
         ],
     install_requires=[
         'yamlns',
