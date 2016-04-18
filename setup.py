@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
 from setuptools import setup
 
 readme = open("README.rst").read()
