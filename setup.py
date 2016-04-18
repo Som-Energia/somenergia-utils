@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 from setuptools import setup
 
 readme = open("README.rst").read()
@@ -26,7 +26,9 @@ setup(
         'psycopg2',
         'consolemsg',
         'gspread',
-    ],
+        'oauth2client',
+        'PyOpenSSL',
+        ],
     classifiers = [
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
