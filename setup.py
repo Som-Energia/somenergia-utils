@@ -28,7 +28,7 @@ setup(
         'psycopg2',
         'consolemsg',
         'gspread',
-        'oauth2client',
+        'oauth2client>=2.0',
         'PyOpenSSL',
         ],
     classifiers = [

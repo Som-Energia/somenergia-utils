@@ -8,18 +8,14 @@ from consolemsg import error, fail
 class SheetFetcher():
 
     def __init__(self, documentName, credentialFilename):
-        from oauth2client.client import SignedJwtAssertionCredentials
+        from oauth2client.service_account import ServiceAccountCredentials
         try:
-            with open(credentialFilename) as credentialFile:
-                json_key = json.load(credentialFile)
+            credentials = ServiceAccountCredentials.from_json_keyfile_name(
+                credentialFilename,
+                scopes=['https://spreadsheets.google.com/feeds',],
+                )
         except Exception as e:
             fail(str(e))
-
-        credentials = SignedJwtAssertionCredentials(
-            json_key['client_email'],
-            json_key['private_key'],
-            scope = ['https://spreadsheets.google.com/feeds']
-            )
 
         gc = gspread.authorize(credentials)
         try:
