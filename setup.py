@@ -27,7 +27,7 @@ setup(
         'yamlns',
         'psycopg2',
         'consolemsg',
-        'gspread',
+        'gspread==0.6.2',
         'oauth2client>=2.0',
         'PyOpenSSL',
         ],
