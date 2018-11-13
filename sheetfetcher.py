@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import io, sys
 import json
 import gspread
 from consolemsg import error, fail
@@ -12,7 +13,8 @@ class SheetFetcher():
         try:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(
                 credentialFilename,
-                scopes=['https://spreadsheets.google.com/feeds',],
+                scopes=['https://spreadsheets.google.com/feeds',
+                        'https://www.googleapis.com/auth/drive',],
                 )
         except Exception as e:
             fail(str(e))
@@ -21,9 +23,10 @@ class SheetFetcher():
         try:
             self.doc = gc.open(documentName)
         except:
+            credentialContent = json.load(io.open(credentialFilename))
             error("No s'ha trobat el document, o no li has donat permisos a l'aplicacio")
             error("Cal compartir el document '{}' amb el següent correu:"
-                .format(documentName,json_key['client_email']))
+                .format(documentName,credentialContent['client_email']))
             error(str(e))
             sys.exit(-1)
 
