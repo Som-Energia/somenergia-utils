@@ -22,7 +22,7 @@ class SheetFetcher():
         gc = gspread.authorize(credentials)
         try:
             self.doc = gc.open(documentName)
-        except:
+        except Exception as e:
             credentialContent = json.load(io.open(credentialFilename))
             error("No s'ha trobat el document, o no li has donat permisos a l'aplicacio")
             error("Cal compartir el document '{}' amb el següent correu:"
