@@ -53,3 +53,18 @@ class SheetFetcher():
     def get_fullsheet(self, worksheetsSelector):
         workSheet = self._worksheet(worksheetsSelector)
         return workSheet.get_all_values()
+
+    def get_sheets(self):
+        sheets = []
+        for c, s in enumerate(self.doc.worksheets()):
+            sheets.append((c, s.title, s.id))
+        return sheets
+
+    def add_to_last_row(self, worksheetsSelector, values):
+        workSheet = self._worksheet(worksheetsSelector)
+        last_index = len(workSheet.get_all_values()) + 1
+        workSheet.insert_row(values, last_index)
+
+    def add_to_first_row(self, worksheetsSelector, values):
+        workSheet = self._worksheet(worksheetsSelector)
+        workSheet.insert_row(values)
