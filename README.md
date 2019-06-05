@@ -12,6 +12,7 @@ but with no entity by themselves to have their own repository.
 	- `nsList`: uses the former to build a list of such object (slower but maybe convinient)
 	- `csvTable`: turns the results of a query into a tab separated table with proper header names
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
+- `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
 
 ## `venv` script
 
@@ -67,6 +68,43 @@ fulltable = fetcher.get_fullsheet("My Sheet")
 - Sheet selectors can be either an index, a name or an id.
 - Range selectors can be either a named range, index tuple or a "A2:F5" coordinates.
 - You should [Create a certificate and grant it access to the document](http://gspread.readthedocs.org/en/latest/oauth2.html)
+
+
+## trace
+
+This decorator is a fast helper to trace calls to functions and methods.
+It will show the name of the functions the values of the parameters and the returned values.
+
+```python
+from trace import trace
+
+@trace
+def factorial(n):
+    if n<1: return 1
+    return n*factorial(n-1)
+
+factorial(8)
+
+('> factorial', (8,))
+('> factorial', (7,))
+('> factorial', (6,))
+('> factorial', (5,))
+('> factorial', (4,))
+('> factorial', (3,))
+('> factorial', (2,))
+('> factorial', (1,))
+('> factorial', (0,))
+('< factorial', (0,), '->', 1)
+('< factorial', (1,), '->', 1)
+('< factorial', (2,), '->', 2)
+('< factorial', (3,), '->', 6)
+('< factorial', (4,), '->', 24)
+('< factorial', (5,), '->', 120)
+('< factorial', (6,), '->', 720)
+('< factorial', (7,), '->', 5040)
+('< factorial', (8,), '->', 40320)
+
+```
 
 
 

@@ -19,6 +19,8 @@ themselves to have their own repository.
 
 -  ``sheetfetcher.py``: convenience class to retrieve data from gdrive
    spreadshets
+-  ``trace``: quickly enable and disable tracing function calling by
+   decorating them with ``@trace``
 
 ``venv`` script
 ---------------
@@ -84,4 +86,41 @@ Convenient wraper for gdrive.
    coordinates.
 -  You should `Create a certificate and grant it access to the
    document <http://gspread.readthedocs.org/en/latest/oauth2.html>`__
+
+trace
+-----
+
+This decorator is a fast helper to trace calls to functions and methods.
+It will show the name of the functions the values of the parameters and
+the returned values.
+
+.. code:: python
+
+    from trace import trace
+
+    @trace
+    def factorial(n):
+        if n<1: return 1
+        return n*factorial(n-1)
+
+    factorial(8)
+
+    ('> factorial', (8,))
+    ('> factorial', (7,))
+    ('> factorial', (6,))
+    ('> factorial', (5,))
+    ('> factorial', (4,))
+    ('> factorial', (3,))
+    ('> factorial', (2,))
+    ('> factorial', (1,))
+    ('> factorial', (0,))
+    ('< factorial', (0,), '->', 1)
+    ('< factorial', (1,), '->', 1)
+    ('< factorial', (2,), '->', 2)
+    ('< factorial', (3,), '->', 6)
+    ('< factorial', (4,), '->', 24)
+    ('< factorial', (5,), '->', 120)
+    ('< factorial', (6,), '->', 720)
+    ('< factorial', (7,), '->', 5040)
+    ('< factorial', (8,), '->', 40320)
 
