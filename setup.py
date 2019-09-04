@@ -25,7 +25,7 @@ setup(
         'venv',
         'activate_wrapper.sh',
         'sql2csv.py',
-        'enable_destructive_test.py',
+        'enable_destructive_tests.py',
         ],
     install_requires=[
         'yamlns>=0.7',
