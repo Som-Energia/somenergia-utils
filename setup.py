@@ -18,6 +18,9 @@ setup(
         "sheetfetcher",
         "dbutils",
         ],
+    packages=[
+        'somutils',
+        ],
     scripts=[
         'venv',
         'activate_wrapper.sh',
