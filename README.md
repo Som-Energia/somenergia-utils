@@ -69,7 +69,6 @@ fulltable = fetcher.get_fullsheet("My Sheet")
 - Range selectors can be either a named range, index tuple or a "A2:F5" coordinates.
 - You should [Create a certificate and grant it access to the document](http://gspread.readthedocs.org/en/latest/oauth2.html)
 
-
 ## trace
 
 This decorator is a fast helper to trace calls to functions and methods.
@@ -106,8 +105,23 @@ factorial(8)
 
 ```
 
+## `testutils.assertNsEqual`
+
+Allows to assert equality on json/yaml like structures convining
+dicts, lists, numbers, strings, dates...
+The comparision is done on the YAML output so that differences are
+spoted as text diffs.
+Also keys in dicts are alphabetically sorted.
 
 
+## `testutils.destructiveTest`
+
+An utility to avoid running destrutive tests in production.
+It is a decorator that checks wheter the erp configured in `dbconfig`
+has the testing flag and skips the test if it doesn't.
+
+The script `enable_destructive_test.py` is also provided to set/unset
+that testing flag which is not defined by default.
 
 
 

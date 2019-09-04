@@ -25,9 +25,10 @@ setup(
         'venv',
         'activate_wrapper.sh',
         'sql2csv.py',
+        'enable_destructive_test.py',
         ],
     install_requires=[
-        'yamlns',
+        'yamlns>=0.7',
         'psycopg2',
         'consolemsg',
         'gspread==0.6.2',
