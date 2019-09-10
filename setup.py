@@ -17,6 +17,7 @@ setup(
     py_modules = [
         "sheetfetcher",
         "dbutils",
+        "trace",
         ],
     packages=[
         'somutils',
