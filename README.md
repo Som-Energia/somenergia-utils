@@ -13,6 +13,9 @@ but with no entity by themselves to have their own repository.
 	- `csvTable`: turns the results of a query into a tab separated table with proper header names
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
+- `testutils`: module with common test utilities
+	- `testutils.assertNsEqual`: structure equality assertion using sorted key yaml dumps
+	- `testutils.destructiveTest`: decorator to avoid running destructive tests in production
 
 ## `venv` script
 
@@ -107,7 +110,7 @@ factorial(8)
 
 ## `testutils.assertNsEqual`
 
-Allows to assert equality on json/yaml like structures convining
+Allows to assert equality on json/yaml like structures combining
 dicts, lists, numbers, strings, dates...
 The comparision is done on the YAML output so that differences are
 spoted as text diffs.
