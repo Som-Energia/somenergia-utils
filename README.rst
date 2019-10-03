@@ -21,6 +21,12 @@ themselves to have their own repository.
    spreadshets
 -  ``trace``: quickly enable and disable tracing function calling by
    decorating them with ``@trace``
+-  ``testutils``: module with common test utilities
+
+   -  ``testutils.assertNsEqual``: structure equality assertion using
+      sorted key yaml dumps
+   -  ``testutils.destructiveTest``: decorator to avoid running
+      destructive tests in production
 
 ``venv`` script
 ---------------
@@ -124,3 +130,20 @@ the returned values.
     ('< factorial', (7,), '->', 5040)
     ('< factorial', (8,), '->', 40320)
 
+``testutils.assertNsEqual``
+---------------------------
+
+Allows to assert equality on json/yaml like structures combining dicts,
+lists, numbers, strings, dates... The comparision is done on the YAML
+output so that differences are spoted as text diffs. Also keys in dicts
+are alphabetically sorted.
+
+``testutils.destructiveTest``
+-----------------------------
+
+An utility to avoid running destrutive tests in production. It is a
+decorator that checks wheter the erp configured in ``dbconfig`` has the
+testing flag and skips the test if it doesn't.
+
+The script ``enable_destructive_test.py`` is also provided to set/unset
+that testing flag which is not defined by default.
