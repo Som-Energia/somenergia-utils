@@ -7,7 +7,7 @@ readme = open("README.rst").read()
 
 setup(
     name = "somutils",
-    version = "1.5.1",
+    version = "1.5.2",
     description = "Tools we use at Somenergia and can be useful",
     author = "César López Ramírez",
     author_email = "cesar.lopez@somenergia.coop",
@@ -30,7 +30,7 @@ setup(
         ],
     install_requires=[
         'yamlns>=0.7',
-        'psycopg2',
+        'psycopg2-binary',
         'consolemsg',
         'gspread==0.6.2',
         'oauth2client>=2.0',
