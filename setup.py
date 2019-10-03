@@ -9,7 +9,7 @@ setup(
     name = "somutils",
     version = "1.5.2",
     description = "Tools we use at Somenergia and can be useful",
-    author = "César López Ramírez",
+    author = u"César López Ramírez",
     author_email = "cesar.lopez@somenergia.coop",
     url = 'https://github.com/Som-Energia/somenergia-utils',
     long_description = readme,
