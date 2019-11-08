@@ -22,7 +22,7 @@ along with Suro. If not, see <http://www.gnu.org/licenses/>.
 
 def sequence(string) :
 	"""
-	Interprets strings like the ones in the standard Print Dialog
+	Interprets strings like the ones the standard Print Dialog
 	uses to specify pages to be printed.
 	ie. "2,4,6-9,13" means "2, 4, from 6 to 9 and 13"
 

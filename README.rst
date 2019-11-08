@@ -147,3 +147,15 @@ testing flag and skips the test if it doesn't.
 
 The script ``enable_destructive_test.py`` is also provided to set/unset
 that testing flag which is not defined by default.
+
+``isodates``
+------------
+
+Module for simplified isodate parsing and timezone handling.
+
+``sequence``
+------------
+
+Interprets strings like the ones the standard Print Dialog uses to
+specify pages to be printed. ie. "2,4,6-9,13" means "2, 4, from 6 to 9
+and 13"
