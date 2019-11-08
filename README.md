@@ -126,5 +126,10 @@ has the testing flag and skips the test if it doesn't.
 The script `enable_destructive_test.py` is also provided to set/unset
 that testing flag which is not defined by default.
 
+## `isodates`
+
+Module for simplified isodate parsing and timezone handling.
+
+
 
 

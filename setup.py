@@ -35,6 +35,7 @@ setup(
         'gspread==0.6.2',
         'oauth2client>=2.0',
         'PyOpenSSL',
+        'pytz',
         ],
     classifiers = [
         'Programming Language :: Python',
