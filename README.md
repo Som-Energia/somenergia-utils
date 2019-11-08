@@ -85,10 +85,8 @@ def factorial(n):
     if n<1: return 1
     return n*factorial(n-1)
 
-factorial(8)
+factorial(6)
 
-('> factorial', (8,))
-('> factorial', (7,))
 ('> factorial', (6,))
 ('> factorial', (5,))
 ('> factorial', (4,))
@@ -103,8 +101,6 @@ factorial(8)
 ('< factorial', (4,), '->', 24)
 ('< factorial', (5,), '->', 120)
 ('< factorial', (6,), '->', 720)
-('< factorial', (7,), '->', 5040)
-('< factorial', (8,), '->', 40320)
 
 ```
 

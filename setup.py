@@ -3,7 +3,7 @@
 
 from setuptools import setup
 
-readme = open("README.rst").read()
+readme = open("README.md").read()
 
 setup(
     name = "somutils",
@@ -13,6 +13,7 @@ setup(
     author_email = "cesar.lopez@somenergia.coop",
     url = 'https://github.com/Som-Energia/somenergia-utils',
     long_description = readme,
+    long_description_content_type = 'text/markdown',
     license = 'GNU General Public License v3 or later (GPLv3+)',
     py_modules = [
         "sheetfetcher",
