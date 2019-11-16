@@ -42,7 +42,12 @@ import click
     is_flag=True,
     help="Reverses the flag, marks it as production",
     )
-def nonproduction(config, disable):
+@click.option(
+    '--i-am-sure',
+    is_flag=True,
+    help="Do not ask for confirmation",
+    )
+def nonproduction(config, disable, i_am_sure):
     dbconfig = loadconfig(config)
     O = erp(dbconfig)
 
@@ -52,8 +57,9 @@ def nonproduction(config, disable):
     step("El flag destructive_testing_allowed ahora esta: {}".format(value))
 
     if not disable:
-        warn("APRIETA CTRL-C SI POR LO QUE SEA ESTAS EN PRODUCCION!!!")
-        ignoreme = raw_input("o return para continuar y cagarla: ")
+        if not i_am_sure:
+            warn("APRIETA CTRL-C SI POR LO QUE SEA ESTAS EN PRODUCCION!!!")
+            ignoreme = raw_input("o return para continuar y cagarla: ")
         O.ResConfig.set('destructive_testing_allowed', True)
         success("Flag destructive_testing_allowed set to True")
     else:
