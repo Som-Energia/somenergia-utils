@@ -31,6 +31,7 @@ setup(
         ],
     install_requires=[
         'yamlns>=0.7',
+        'decorator',
         'psycopg2-binary',
         'consolemsg',
         'gspread==0.6.2',
