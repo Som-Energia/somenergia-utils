@@ -61,7 +61,7 @@ def main():
         except KeyError as e:
             fail("Missing variable '{key}'. Specify it in the YAML file or by using the --{key} option"
                 .format(key=e.args[0]))
-        print dbutils.csvTable(cursor)
+        print(dbutils.csvTable(cursor))
 
 
 main()
