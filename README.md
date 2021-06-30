@@ -16,6 +16,8 @@ but with no entity by themselves to have their own repository.
 - `testutils`: module with common test utilities
 	- `testutils.assertNsEqual`: structure equality assertion using sorted key yaml dumps
 	- `testutils.destructiveTest`: decorator to avoid running destructive tests in production
+- `erptree`: extracts an object and its children from the erp (erppeek, odoo)
+	with controlled recursion
 
 ## `venv` script
 
@@ -132,6 +134,43 @@ Module for simplified isodate parsing and timezone handling.
 Interprets strings like the ones the standard Print Dialog
 uses to specify pages to be printed.
 ie. "2,4,6-9,13" means "2, 4, from 6 to 9 and 13"
+
+## `erptree`
+
+Creates an structure from ERP objects that you can navigate
+or dump as yaml.
+You can select fields to expand, taking just the name or the id,
+anonymize or removing.
+You can use dot notation to specify fields in related objects.
+For multiple relations, a subfield refers to the subfield in
+all related objects.
+
+
+```python
+from somutils.erptree import erptree
+
+O = Client(....)
+
+partner = erptree(partnerAddress_id, O.ResPartnerAddress,
+	expand = {
+		'partner_id': O.ResPartner,
+		'partner_id.company': O.ResPartner,
+	},
+	pickName = [
+		'partner_id.state_id',
+		'partner_id.country_id',
+	],
+	anonymize = [
+		'email',
+	],
+	remove = [
+		'superfluous_field',
+	],
+)
+	
+```
+
+
 
 
 
