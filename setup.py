@@ -7,7 +7,7 @@ readme = open("README.md").read()
 
 setup(
     name = "somutils",
-    version = "1.6.1",
+    version = "1.7.0",
     description = "Tools we use at Somenergia and can be useful",
     author = u"César López Ramírez",
     author_email = "cesar.lopez@somenergia.coop",
