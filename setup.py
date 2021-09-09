@@ -34,7 +34,7 @@ setup(
         'decorator',
         'psycopg2-binary',
         'consolemsg',
-        'gspread==0.6.2',
+        'gspread>=4.0.0',
         'oauth2client>=2.0',
         'PyOpenSSL',
         'pytz',
