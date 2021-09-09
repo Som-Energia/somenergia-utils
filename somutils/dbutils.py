@@ -10,7 +10,6 @@ def fetchNs(cursor):
 	fields = [column.name for column in cursor.description]
 	for row in cursor:
 		yield ns(zip(fields, row))
-	raise StopIteration
 
 def nsList(cursor) :
 	"""
