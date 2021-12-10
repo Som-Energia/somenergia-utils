@@ -36,9 +36,11 @@ setup(
         'oauth2client>=2.0',
         'pytz',
         ] + ([
+        'gspread<3.8',
+        'google-auth-oauthlib<0.4.2',
+        'oauthlib<3.1',
         'setuptools_rust<0.11',
         'psycopg2-binary<2.9',
-        'gspread<5',
         'decorator<5',
         'cryptography<3.4',
         'rsa<4.6',
@@ -46,7 +48,6 @@ setup(
         'httplib2<0.18',
         'pathlib2',
         'pyyaml<6',
-        'oauthlib<3.1',
         ] if sys.version_info < (3,) else [
         'PyOpenSSL',
         'psycopg2-binary',
