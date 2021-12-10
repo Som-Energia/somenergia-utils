@@ -2,7 +2,7 @@
 #-*- coding: utf8 -*-
 
 import psycopg2
-import dbutils
+from somutils import dbutils
 import sys
 from consolemsg import step, error, fail, warn
 from yamlns import namespace as ns
