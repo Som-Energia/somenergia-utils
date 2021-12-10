@@ -30,6 +30,7 @@ setup(
         'enable_destructive_tests.py',
         ],
     install_requires=[
+        'setuptoools>=36.2', # for conditional dependencies
         'yamlns>=0.7',
         'decorator',
         'psycopg2-binary',
