@@ -45,6 +45,7 @@ setup(
         'cachetools<4',
         'httplib2<0.18',
         'pathlib2',
+        'pyyaml<6',
         ] if sys.version_info < (3,) else [
         'PyOpenSSL',
         'psycopg2-binary',
