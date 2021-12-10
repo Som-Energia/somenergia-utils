@@ -31,19 +31,24 @@ setup(
         'enable_destructive_tests.py',
         ],
     install_requires=[
-        'setuptoools>=36.2', # for conditional dependencies
         'yamlns>=0.7',
-        'decorator',
-        'psycopg2-binary',
         'consolemsg',
-        'gspread>=4',
         'oauth2client>=2.0',
-        'PyOpenSSL',
         'pytz',
         ] + ([
+        'setuptools_rust<0.11',
         'psycopg2-binary<2.9',
         'gspread<5',
-        ] if sys.version_info < (3,) else []),
+        'decorator<5',
+        'cryptography<3.4',
+        'rsa<4.6',
+        'cachetools<4',
+        ] if sys.version_info < (3,) else [
+        'PyOpenSSL',
+        'psycopg2-binary',
+        'decorator',
+        'gspread>=4',
+        ]),
     classifiers = [
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
