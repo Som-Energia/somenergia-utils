@@ -46,7 +46,7 @@ jobs:
             pytest-cov
       - name: Unit tests
         run: |
-          pytest --cov=somutils
+          pytest --cov=somutils somutils
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
