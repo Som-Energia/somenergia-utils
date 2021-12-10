@@ -8,7 +8,6 @@ tests to be run in a production server by error.
 DO NOT RUN IT AGAINST A PRODUCTION SERVER!!
 """
 
-import erppeek
 from yamlns import namespace as ns
 
 def loadconfig(filename):
@@ -22,6 +21,7 @@ def loadconfig(filename):
 def erp(dbconfig=None):
     if hasattr(erp,'value'):
         return erp.value
+    import erppeek
     erp.value = erppeek.Client(**dbconfig.erppeek)
     return erp.value
 
