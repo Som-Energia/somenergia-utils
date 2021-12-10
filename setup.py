@@ -35,9 +35,10 @@ setup(
         'consolemsg',
         'pytz',
         ] + ([
-        'gspread<3.8',
-        'google-auth-oauthlib<0.4.2',
-        'oauthlib<3.1',
+        'gspread<4', # Py2 dropped
+        'google-auth<0.35', # Py2 dropped
+        'google-auth-oauthlib<0.4.2', # Py2 dropped
+        'oauthlib<3', # Py2 dropped
         'setuptools_rust<0.11',
         'psycopg2-binary<2.9',
         'decorator<5',
