@@ -2,6 +2,7 @@
 #-*- coding: utf8 -*-
 
 from setuptools import setup
+import sys
 
 readme = open("README.md").read()
 
@@ -34,14 +35,15 @@ setup(
         'yamlns>=0.7',
         'decorator',
         'psycopg2-binary',
-        'psycopg2-binary<2.9;python_version<3',
         'consolemsg',
         'gspread>=4',
-        'gspread<5;python_version<3',
         'oauth2client>=2.0',
         'PyOpenSSL',
         'pytz',
-        ],
+        ] + ([
+        'psycopg2-binary<2.9',
+        'gspread<5',
+        ] if sys.version_info < (3,) else []),
     classifiers = [
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
