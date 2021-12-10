@@ -33,7 +33,6 @@ setup(
     install_requires=[
         'yamlns>=0.7',
         'consolemsg',
-        'oauth2client>=2.0',
         'pytz',
         ] + ([
         'gspread<3.8',
@@ -49,6 +48,7 @@ setup(
         'pathlib2',
         'pyyaml<6',
         ] if sys.version_info < (3,) else [
+        'google-auth',
         'PyOpenSSL',
         'psycopg2-binary',
         'decorator',

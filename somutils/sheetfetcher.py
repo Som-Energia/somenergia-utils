@@ -9,9 +9,9 @@ from consolemsg import error, fail
 class SheetFetcher():
 
     def __init__(self, documentName, credentialFilename):
-        from oauth2client.service_account import ServiceAccountCredentials
+        from google.oauth2.service_account import Credentials
         try:
-            credentials = ServiceAccountCredentials.from_json_keyfile_name(
+            credentials = Credentials.from_service_account_file(
                 credentialFilename,
                 scopes=['https://spreadsheets.google.com/feeds',
                         'https://www.googleapis.com/auth/drive',],
