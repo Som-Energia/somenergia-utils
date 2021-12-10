@@ -93,10 +93,13 @@ def getContext(o, attribute):
         return
     if type(o) == list:
         for item in o:
-            yield from getContext(item, attribute)
+            # TODO: substitute by "yield from" on Py2 dropped
+            for x in getContext(item, attribute): yield x
         return
     nextSteps = '.'.join(steps[1:])
-    yield from getContext(o[steps[0]], nextSteps)
+    # TODO: substitute by "yield from" on Py2 dropped
+    for x in getContext(o[steps[0]], nextSteps):
+        yield x
 
 
 
