@@ -46,6 +46,7 @@ setup(
         'httplib2<0.18',
         'pathlib2',
         'pyyaml<6',
+        'oauthlib<3.1',
         ] if sys.version_info < (3,) else [
         'PyOpenSSL',
         'psycopg2-binary',
