@@ -34,11 +34,12 @@ setup(
         'yamlns>=0.7',
         'consolemsg',
         'pytz',
+        'google-auth',
         ] + ([
         'gspread<4', # Py2 dropped
-        'google-auth<0.35', # Py2 dropped
         'google-auth-oauthlib<0.4.2', # Py2 dropped
         'oauthlib<3', # Py2 dropped
+        'requests-oauthlib<1.2', # Py2 dropped
         'setuptools_rust<0.11',
         'psycopg2-binary<2.9',
         'decorator<5',
@@ -49,7 +50,6 @@ setup(
         'pathlib2',
         'pyyaml<6',
         ] if sys.version_info < (3,) else [
-        'google-auth',
         'PyOpenSSL',
         'psycopg2-binary',
         'decorator',
