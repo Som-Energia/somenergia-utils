@@ -11,6 +11,7 @@ but with no entity by themselves to have their own repository.
 	- `fetchNs`: a generator that wraps db cursors to fetch objects with attributes instead of psycopg arrays
 	- `nsList`: uses the former to build a list of such object (slower but maybe convinient)
 	- `csvTable`: turns the results of a query into a tab separated table with proper header names
+- `isodates`: String to time/date/datetime objects with naive/timezoned handling
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
 - `testutils`: module with common test utilities
