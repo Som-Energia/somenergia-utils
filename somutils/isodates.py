@@ -30,20 +30,16 @@ def parseLocalTime(string, isSummer=False, format="%Y-%m-%d %H:%M:%S"):
     lesser = tz.normalize(localized-onehour)
     return lesser if lesser.dst() else localized
 
-def addHours(normalized, hours):
-    hours = datetime.timedelta(hours=hours)
-    return tz.normalize(normalized + hours)
-
 def localisodate(string):
-    """Takes a date string and returns it as local datetime"""
+    """Takes a date string and returns it as local datetime (time set to 00:00:00CET/CEST)"""
     return string and toLocal(datetime.datetime.strptime(string, "%Y-%m-%d"))
 
 def utcisodate(string):
-    """Takes a date string and returns it as utc datetime"""
+    """Takes a date string and returns it as utc datetime (time set to 00:00:00Z)"""
     return string and asUtc(datetime.datetime.strptime(string, "%Y-%m-%d"))
 
 def naiveisodate(string):
-    """Takes a date string and returns it as naive datetime"""
+    """Takes a date string and returns it as naive datetime (time set to 00:00:00, no TZ)"""
     return string and datetime.datetime.strptime(string, "%Y-%m-%d")
 
 def isodate(string):
@@ -51,16 +47,20 @@ def isodate(string):
     return string and datetime.datetime.strptime(string, "%Y-%m-%d").date()
 
 def naiveisodatetime(string):
-    """Takes a date-time string and returns a naive date"""
+    """Takes a date-time string and returns a naive datetime"""
     return string and datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
 def localisodatetime(string):
-    """Takes a date-time string and returns a local date"""
+    """Takes a date-time string and returns a local datetime"""
     return string and toLocal(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S"))
 
 def utcisodatetime(string):
-    """Takes a date-time string and returns it as utc date"""
+    """Takes a date-time string and returns it as utc datetime"""
     return string and asUtc(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S"))
+
+def isodatetime(string):
+    """Takes a time-zoned iso date-time string and returns a datetime"""
+    return string and datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S%T")
 
 def dateToLocal(date):
     # TODO: optimize dateToLocal
@@ -101,6 +101,10 @@ def assertUtcDateTime(name, value):
     assert value.tzname() == 'UTC', (
         "{} has {} timezone".format(name, value.tzname()))
 
+def addHours(dt, hours):
+    hours = datetime.timedelta(hours=hours)
+    return tz.normalize(dt + hours)
+
 def addDays(date, ndays):
     resultday = date.date() + datetime.timedelta(days=ndays)
     naiveday = datetime.datetime.combine(resultday, datetime.time(0,0,0))
@@ -109,8 +113,8 @@ def addDays(date, ndays):
 # TODO: TOTEST
 def daterange(start_date, end_date, **kwds):
     """
-    Generates dates from start_date to end_date,
-    additional parameters provides paramenters for the
+    Generates dates from start_date to end_date, both included.
+    Additional parameters provides paramenters for the
     timedelta constructor to be used as step.
     """
     step = kwds or dict(days=1)
