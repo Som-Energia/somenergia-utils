@@ -63,8 +63,8 @@ def main():
                 .format(key=e.args[0]))
         print(dbutils.csvTable(cursor))
 
-
-main()
+if __name__ == '__main__':
+    mail()
 
 
 
