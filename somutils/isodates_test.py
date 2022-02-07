@@ -5,6 +5,10 @@ from .isodates import (
     toLocal,
     parseLocalTime,
     assertLocalDateTime,
+    daterange,
+    isodate,
+    addHours,
+    addDays,
     )
 
 import datetime
@@ -85,6 +89,25 @@ class LocalTime_Test(unittest.TestCase):
     def test_assertLocalDateTime_withLocal(self):
         assertLocalDateTime('myname', toLocal(datetime.datetime(2016,1,1)))
         # No assert
+
+    def test_daterange(self):
+        days = daterange(
+            isodate('2020-01-02'),
+            isodate('2020-01-04'),
+        )
+        self.assertEqual(list(days), [
+            isodate('2020-01-02'),
+            isodate('2020-01-03'),
+            isodate('2020-01-04'),
+        ])
+
+    def test_daterange_invertedRange(self):
+        days = daterange(
+            isodate('2020-01-04'),
+            isodate('2020-01-02'),
+        )
+        self.assertEqual(list(days), [
+        ])
 
 
 
