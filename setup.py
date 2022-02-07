@@ -5,6 +5,7 @@ from setuptools import setup
 import sys
 
 readme = open("README.md").read()
+py2 = sys.version_info < (3,)
 
 setup(
     name = "somutils",
@@ -34,9 +35,9 @@ setup(
         'yamlns>=0.7',
         'consolemsg',
         'pytz',
-        'google-auth',
         ] + ([
         'gspread<4', # Py2 dropped
+        'google-auth<=1.34', # Py2 dropped
         'google-auth-oauthlib<0.4.2', # Py2 dropped
         'oauthlib<3', # Py2 dropped
         'requests-oauthlib<1.2', # Py2 dropped
@@ -49,7 +50,8 @@ setup(
         'httplib2<0.18',
         'pathlib2',
         'pyyaml<6',
-        ] if sys.version_info < (3,) else [
+        ] if py2 else [
+        'google-auth',
         'PyOpenSSL',
         'psycopg2-binary',
         'decorator',
