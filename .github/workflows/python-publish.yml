@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'somutils-[0-9+].[0-9]+.[0-9]+'
+      - 'somutils-[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   deploy:
