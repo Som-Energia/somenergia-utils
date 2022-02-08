@@ -35,6 +35,7 @@ setup(
         'yamlns>=0.7',
         'consolemsg',
         'pytz',
+        'python-dateutil',
         ] + ([
         'gspread<4', # Py2 dropped
         'google-auth<=1.34', # Py2 dropped

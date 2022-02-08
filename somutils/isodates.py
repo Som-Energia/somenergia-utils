@@ -32,11 +32,11 @@ def parseLocalTime(string, isSummer=False, format="%Y-%m-%d %H:%M:%S"):
 
 def localisodate(string):
     """Takes a date string and returns it as local datetime (time set to 00:00:00CET/CEST)"""
-    return string and toLocal(datetime.datetime.strptime(string, "%Y-%m-%d"))
+    return string and toLocal(naiveisodate(string))
 
 def utcisodate(string):
     """Takes a date string and returns it as utc datetime (time set to 00:00:00Z)"""
-    return string and asUtc(datetime.datetime.strptime(string, "%Y-%m-%d"))
+    return string and asUtc(naiveisodate(string))
 
 def naiveisodate(string):
     """Takes a date string and returns it as naive datetime (time set to 00:00:00, no TZ)"""
@@ -44,23 +44,26 @@ def naiveisodate(string):
 
 def isodate(string):
     """Takes a date string and returns it as date (no time)"""
-    return string and datetime.datetime.strptime(string, "%Y-%m-%d").date()
-
-def naiveisodatetime(string):
-    """Takes a date-time string and returns a naive datetime"""
-    return string and datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
+    return string and naiveisodate(string).date()
 
 def localisodatetime(string):
-    """Takes a date-time string and returns a local datetime"""
-    return string and toLocal(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S"))
+    """Takes a date-time string and returns a local (CET/CEST) datetime.
+    Timezoned strings are converted, naive strings are interpreted.
+    Be aware that naive strings (no time zone), might be ambiguous
+    or ilegal on daylight time changes.
+    """
+    return string and toLocal(isodatetime(string))
 
 def utcisodatetime(string):
-    """Takes a date-time string and returns it as utc datetime"""
-    return string and asUtc(datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S"))
+    """Takes a date-time string and returns it as utc datetime.
+    Timezoned strings are converted, naive strings are interpreted.
+    """
+    return string and asUtc(isodatetime(string))
 
 def isodatetime(string):
-    """Takes a time-zoned iso date-time string and returns a datetime"""
-    return string and datetime.datetime.strptime(string, "%Y-%m-%d %H:%M:%S%T")
+    """Takes a time-zoned (or naive) iso date-time string and returns it as a datetime"""
+    import dateutil.parser
+    return string and dateutil.parser.isoparse(string)
 
 def dateToLocal(date):
     # TODO: optimize dateToLocal
