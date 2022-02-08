@@ -22,8 +22,8 @@ but with no entity by themselves to have their own repository.
 
 ## `venv` script
 
-This script is useful to run Python scripts under a given virtual environment.
-It is specially useful to run Python scripts from crontab lines.
+Simplifies running a Python script under a given virtual environtment.
+This is specially useful to run Python scripts from crontab lines.
 
 ```bash
 usage: venv /PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
@@ -32,6 +32,10 @@ usage: venv /PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
 ## `sql2csv.py` script
 
 Runs an SQL file and outputs the result of the query as tabulator separated csv.a
+
+A local dbconfig.py file is required, or you should provide it as `-C file.py`
+It should contain a dict named `pyscopg` with the keyword parameters to
+[psycopg2.connect](https://www.psycopg.org/docs/module.html#psycopg2.connect).
 
 You can provide query parameters either as yamlfile or as commandline options.
 
