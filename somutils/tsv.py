@@ -1,4 +1,5 @@
 from yamlns import namespace as ns
+from consolemsg import u
 try:
     from pathlib import Path
 except ImportError:
@@ -34,7 +35,7 @@ def tsvwrite(file, iterable):
     for item in iterable:
         if not tsv:
             tsv = csv.DictWriter(file,
-                fieldnames=item.keys(),
+                fieldnames=[u(x) for x in item.keys()],
                 delimiter='\t',
                 lineterminator='\n',
             )
