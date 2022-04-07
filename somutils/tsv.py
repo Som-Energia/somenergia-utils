@@ -6,8 +6,6 @@ try:
 except ImportError:
     from pathlib2 import Path # Py2
 import csv
-import sys
-py2 = sys.version_info < (3,)
 
 def tsvread(file):
     """
@@ -20,7 +18,7 @@ def tsvread(file):
                 yield item
             return
 
-    tsv = csv.DictReader(file, delimiter='\t')
+    tsv = csv.DictReader(file, delimiter=str('\t')) # Py2 hack, str
     for item in tsv:
         yield ns(item)
 
@@ -39,10 +37,10 @@ def tsvwrite(file, iterable):
             tsv = csv.DictWriter(file,
                 fieldnames=[u(x) for x in item.keys()], # Py2
                 #fieldnames=list(item.keys()), # Py3 only
-                delimiter=b'\t' if py2 else '\t',
+                delimiter=str('\t'), # Py2 hack, str
                 lineterminator='\n',
             )
             tsv.writeheader()
-        tsv.writerow(dict((k,u(v)) for k,v in item.items())) # Py2
+        tsv.writerow(dict((k,u(v)) for k,v in item.items())) # Py2 hack
         #tsv.writerow(item) # Py3 only
 
