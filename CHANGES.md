@@ -2,6 +2,7 @@
 
 ## somutils 1.8.0 2022-04-07
 
+- new `tsv` module: quick serialization of dict objects as TSV files (`tsvread`/`tsvwrite`) 
 - `testutils.temp_path`: context manager to get a self destructed temporary directory as Path
 
 ## somutils 1.7.3 2022-02-08
