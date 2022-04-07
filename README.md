@@ -9,9 +9,14 @@ ubiquiously used on scripts in SomEnergia cooperative
 but with no entity by themselves to have their own repository.
 
 
-- `venv`: run a command under a Python virtual enviroment
+- `venv`: script to run a command under a Python virtual enviroment
 - `sql2csv.py`: script to run parametrized sql queries and get the result as (tab separated) csv.
+- `tsv`: module for quick TSV serialization (csv with tabs as separators) of yamlns.namespace and dict like objects
+	- `tsvread`: provides TSV rows as yamlns.namespaces (dict specialization)
+	- `tsvwrite`: writes a TSV from a sequence of dicts
 - `dbutils.py`: module with db related functions
+	- `runsql`: runs a file with a sql and returns the objects as yamlns namespaces
+	- `runsql_cached`: like runsql but cache the results in a tsv file to avoid second runs
 	- `fetchNs`: a generator that wraps db cursors to fetch objects with attributes instead of psycopg arrays
 	- `nsList`: uses the former to build a list of such object (slower but maybe convinient)
 	- `csvTable`: turns the results of a query into a tab separated table with proper header names
@@ -19,8 +24,8 @@ but with no entity by themselves to have their own repository.
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
 - `testutils`: module with common test utilities
-	- `testutils.assertNsEqual`: structure equality assertion using sorted key yaml dumps
 	- `testutils.destructiveTest`: decorator to avoid running destructive tests in production
+	- `testutils.temp_path`: context manager that provides a selfdestructing temporary directory for tests
 - `erptree`: extracts an object and its children from the erp (erppeek, odoo)
 	with controlled recursion
 
@@ -37,7 +42,7 @@ usage: venv /PATH/TO/PYTHON/VIRTUALENV COMMAND [PARAM1 [PARAM2...]]
 
 Runs an SQL file and outputs the result of the query as tabulator separated csv.a
 
-A local dbconfig.py file is required, or you should provide it as `-C file.py`
+A local `config.py` file is required, or you should provide it as `-C file.py`
 It should contain a dict named `pyscopg` with the keyword parameters to
 [psycopg2.connect](https://www.psycopg.org/docs/module.html#psycopg2.connect).
 
@@ -48,6 +53,35 @@ You can provide query parameters either as yamlfile or as commandline options.
 ```
 
 ## `dbutils` Python module
+
+### Convenient database access
+
+Having a query in a file.
+
+```python
+params = dict(
+   param1='value',
+   param2=[1,3,4,5], # Useful for the IN clause
+)
+for item in runsql('myquery.sql', **params):
+   print(item.id, item.description) # id and description should be columns in the query
+```
+
+Like `sql2csv` there must exist a config.py file or provide it with the `config` keyword parameter.
+
+TODO: db and cursor parameters to reuse existing ones.
+
+If you know the results will be always the same, you can use `runsql_cache` instead.
+It will generate a tsv file name like the sql file with the results,
+and will use it instead of the query for next executions.
+
+The usage of `runsql_cache` is quite similar to `runsql` to be exchangeable.
+`runsql_cache` just adds a couple of keyword arguments.
+
+- `cachefile`: to override the default cache file (a name, a path or a file like object)
+- `force`: to force the query execution even if the cache exists
+
+### Cursor wrappers
 
 Convenient cursor wrappers to make the database access code more readable.
 
