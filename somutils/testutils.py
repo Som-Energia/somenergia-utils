@@ -40,7 +40,8 @@ def temp_path():
     >>> with temp_path() as tmp:
     ...     mypath = tmp / 'myfile'
     ...     nbytes = mypath.write_text('hello world', encoding='utf8')
-    ...     mypath.read_text(encoding='utf8') # returns "hello world"
+    ...     # TODO: remove the str bellow when Py2 dropped
+    ...     str(mypath.read_text(encoding='utf8')) # returns "hello world"
     ...     assert mypath.exists(), "Should exists at this point"
     'hello world'
 
