@@ -1,5 +1,9 @@
 # Change log
 
+## somutils 1.8.0 2022-04-07
+
+- `testutils.temp_path`: context manager to get a self destructed temporary directory as Path
+
 ## somutils 1.7.3 2022-02-08
 
 - First changelog entry
