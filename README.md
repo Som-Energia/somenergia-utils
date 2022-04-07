@@ -26,6 +26,8 @@ but with no entity by themselves to have their own repository.
 - `testutils`: module with common test utilities
 	- `testutils.destructiveTest`: decorator to avoid running destructive tests in production
 	- `testutils.temp_path`: context manager that provides a selfdestructing temporary directory for tests
+	- `testutils.working_dir`: context manager that changes the current working directory and restores it afterwards
+	- `testutils.sandbox_dir`: context manager that combines `temp_path` and `working_dir`
 - `erptree`: extracts an object and its children from the erp (erppeek, odoo)
 	with controlled recursion
 
