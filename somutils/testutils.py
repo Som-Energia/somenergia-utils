@@ -68,7 +68,7 @@ def temp_path():
     try:
         yield path
     finally:
-        shutil.rmtree(path, ignore_errors=True)
+        shutil.rmtree(str(path), ignore_errors=True)
 
 
 
