@@ -34,13 +34,27 @@ def temp_path():
     """
     Context manager that creates a temporary dir and ensures
     that all the content is removed after the with scope
-    Returns the pathlib Path of the created dir
+    Returns the pathlib Path of the created dir.
+
     >>> with temp_path() as tmp:
     ...     mypath = tmp / 'myfile'
     ...     nbytes = mypath.write_text('hello world', encoding='utf8')
     ...     mypath.read_text(encoding='utf8') # returns "hello world"
     ...     assert mypath.exists(), "Should exists at this point"
     'hello world'
+
+    >>> assert not mypath.exists(), "Sould not exist at this point"
+
+    It will clean up even after raising an exception
+
+    >>> with temp_path() as tmp:
+    ...     mypath = tmp / 'myfile'
+    ...     nbytes = mypath.write_text('hello world', encoding='utf8')
+    ...     assert mypath.exists(), "Should exists at this point"
+    ...     raise Exception("This will interrupt the code")
+    Traceback (most recent call last):
+        ...
+    Exception: This will interrupt the code
 
     >>> assert not mypath.exists(), "Sould not exist at this point"
     """
