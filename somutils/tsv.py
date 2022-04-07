@@ -39,7 +39,7 @@ def tsvwrite(file, iterable):
             tsv = csv.DictWriter(file,
                 fieldnames=[u(x) for x in item.keys()], # Py2
                 #fieldnames=list(item.keys()), # Py3 only
-                delimiter=b'\t' if py2 else 't',
+                delimiter=b'\t' if py2 else '\t',
                 lineterminator='\n',
             )
             tsv.writeheader()
