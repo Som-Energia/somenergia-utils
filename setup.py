@@ -46,7 +46,7 @@ setup(
         'setuptools_rust<0.11',
         'psycopg2-binary<2.9',
         'decorator<5',
-        'cryptography<3.4',
+        'cryptography<3.4', # Py2 dropped
         'rsa<4.6',
         'cachetools<4',
         'httplib2<0.18',
