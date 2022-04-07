@@ -35,10 +35,12 @@ def tsvwrite(file, iterable):
     for item in iterable:
         if not tsv:
             tsv = csv.DictWriter(file,
-                fieldnames=[u(x) for x in item.keys()],
+                fieldnames=[u(x) for x in item.keys()], # Py2
+                #fieldnames=list(item.keys()), # Py3 only
                 delimiter='\t',
                 lineterminator='\n',
             )
             tsv.writeheader()
-        tsv.writerow(item)
+        tsv.writerow(dict((k,u(v)) for k,v in item.items())) # Py2
+        #tsv.writerow(item) # Py3 only
 
