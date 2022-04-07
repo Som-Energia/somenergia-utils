@@ -63,7 +63,7 @@ def temp_path():
     import tempfile
 
     path = Path(tempfile.mkdtemp())
-    shutil.rmtree(path, ignore_errors=True)
+    shutil.rmtree(str(path), ignore_errors=True)
     path.mkdir(parents=True, exist_ok=True)
     try:
         yield path
