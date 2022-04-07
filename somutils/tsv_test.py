@@ -1,13 +1,12 @@
-
 import unittest
-from .tsv import tsvwrite, tsvread
 from yamlns import ns
 try:
     from pathlib import Path
 except ImportError:
     from pathlib2 import Path # Py2
-from .testutils import temp_path
 
+from .testutils import temp_path
+from .tsv import tsvwrite, tsvread
 
 
 class DbUtilsTest(unittest.TestCase):
