@@ -1,5 +1,9 @@
 # somenergia-utils
 
+[![CI Status](https://github.com/Som-Energia/somenergia-utils/actions/workflows/main.yml/badge.svg)](https://github.com/Som-Energia/somenergia-utils/actions/workflows/main.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Som-Energia/somenergia-utils/badge.svg?branch=master)](https://coveralls.io/github/Som-Energia/somenergia-utils?branch=master)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/somutils)](https://pypi.org/project/somutils)
+
 This module includes different Python modules and scripts
 ubiquiously used on scripts in SomEnergia cooperative
 but with no entity by themselves to have their own repository.
