@@ -38,7 +38,7 @@ def tsvwrite(file, iterable):
                 fieldnames=[u(x) for x in item.keys()], # Py2
                 #fieldnames=list(item.keys()), # Py3 only
                 delimiter=str('\t'), # Py2 hack, str
-                lineterminator='\n',
+                lineterminator=str('\n'), # Py2 hack, str
             )
             tsv.writeheader()
         tsv.writerow(dict((k,u(v)) for k,v in item.items())) # Py2 hack
