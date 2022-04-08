@@ -84,7 +84,7 @@ class DbUtilsTest(unittest.TestCase):
               - field1: value1
                 field2: value2
             """)
-            with tsvfile.open('w') as file:
+            with tsvfile.open('w', encoding='utf8') as file:
                 tsvwrite(file, data) # passing an open file, not a Path
 
             self.assertContent(tsvfile,

@@ -28,7 +28,7 @@ def tsvwrite(file, iterable):
     Columns are taken from the keys of the first item.
     """
     if not hasattr(file, 'write'):
-        with Path(file).open('w') as outputfile:
+        with Path(file).open('w', encoding='utf8') as outputfile:
             return tsvwrite(outputfile, iterable)
 
     tsv = None
