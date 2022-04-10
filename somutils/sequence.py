@@ -63,16 +63,4 @@ def sequence(string) :
 		( processItem(a) for a in string.split(',') )
 		,[])))
 
-def load_tests(loader, tests, ignore):
-	import doctest
-	tests.addTests(doctest.DocTestSuite())
-	return tests
-
-if __name__ == '__main__' :
-	import unittest
-	import sys
-	sys.exit(unittest.main())
-
-
-
 
