@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 from yamlns import ns
 from .testutils import sandbox_dir, Path

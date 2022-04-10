@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from yamlns import namespace as ns
 try:
     from pathlib import Path
