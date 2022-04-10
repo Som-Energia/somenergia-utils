@@ -3,7 +3,13 @@
 ## somutils 1.8.0 2022-04-07
 
 - new `tsv` module: quick serialization of dict objects as TSV files (`tsvread`/`tsvwrite`) 
-- `testutils.temp_path`: context manager to get a self destructed temporary directory as Path
+- `testutils.temp_path()`: context manager to get a self destructed temporary directory as Path
+- `testutils.working_dir(path)`: context manager to run code with a changed working directory
+- `testutils.sandbox_dir()`: context manager to run code with a self-destructed temporary directory as the working dir 
+- `dbutils.runsql`: running parametrized sql files
+- `dbutils.runsql_cached`: like runsql but using a tsv file as cache to avoid repeated execution
+- `sql2csv` deconstructed on the previous functions
+- `sql2csv` has a new `-o` option to dump to a file
 
 ## somutils 1.7.3 2022-02-08
 
