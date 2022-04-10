@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 from yamlns import namespace as ns
-from consolemsg import u
+
 try:
     from pathlib import Path
 except ImportError:
     from pathlib2 import Path # Py2
-import csv
+import csv342 as csv # Py2 compatibility, use plain csv when dropped
 
 def tsvread(file):
     """
@@ -18,7 +18,7 @@ def tsvread(file):
                 yield item
             return
 
-    tsv = csv.DictReader(file, delimiter=str('\t')) # Py2 hack, str
+    tsv = csv.DictReader(file, delimiter='\t') # Py2 hack, str
     for item in tsv:
         yield ns(item)
 
@@ -33,14 +33,12 @@ def tsvwrite(file, iterable):
 
     tsv = None
     for item in iterable:
-        if not tsv:
+        if not tsv: # first item
             tsv = csv.DictWriter(file,
-                fieldnames=[u(x) for x in item.keys()], # Py2
-                #fieldnames=list(item.keys()), # Py3 only
-                delimiter=str('\t'), # Py2 hack, str
-                lineterminator=str('\n'), # Py2 hack, str
+                fieldnames=item.keys(),
+                delimiter='\t',
+                lineterminator='\n',
             )
             tsv.writeheader()
-        tsv.writerow(dict((k,u(v)) for k,v in item.items())) # Py2 hack
-        #tsv.writerow(item) # Py3 only
+        tsv.writerow(item)
 

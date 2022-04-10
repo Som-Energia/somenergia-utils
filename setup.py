@@ -36,6 +36,7 @@ setup(
         'consolemsg',
         'pytz',
         'python-dateutil',
+        'csv342', # Py2/3 compatibility
         ] + ([
         'gspread<4', # Py2 dropped
         'google-auth<=1.34', # Py2 dropped
