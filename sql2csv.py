@@ -2,7 +2,7 @@
 #-*- coding: utf8 -*-
 
 import psycopg2
-from somutils import dbutils
+from somutils import dbutils, tsv
 import sys
 from consolemsg import step, error, fail, warn
 from yamlns import namespace as ns
@@ -33,11 +33,7 @@ def main():
 
     if not args:
         fail("Argument required. Usage:\n"
-        "{} <sqlfile> [-C <dbconfig.py>] [<yamlfile>] [--<var1> <value1> [--<var2> <value2> ..] ]".format(sys.argv[0]))
-
-    step("Loading {}...".format(args[0]))
-    with open(args[0]) as sqlfile:
-        query = sqlfile.read()
+        "{} <sqlfile> [-C <dbconfig.py>] [<yamlfile>] [-o output.tsv] [--<var1> <value1> [--<var2> <value2> ..] ]".format(sys.argv[0]))
 
     variables = ns()
     if len(args)>=2:
@@ -46,22 +42,19 @@ def main():
         warn(variables.dump())
     variables.update(cliargs)
 
-    if 'C' in options:
-        import imp
-        config=imp.load_source('config',options.C)
-    else:
-        import config
+    try:
+        tsv.tsvwrite(
+            optarg.get('o', sys.stdout),
+            dbutils.runsql(
+                sqlfile=args[0],
+                configfile=options.C if 'C' in options else None,
+                **variables
+            )
+        )
+    except dbutils.MissingParameter as e:
+        fail("Missing variable '{key}'. Specify it in the YAML file or by using the --{key} option"
+            .format(key=e.args[0]))
 
-    step("Connecting to the database...")
-    db = psycopg2.connect(**config.psycopg)
-
-    with db.cursor() as cursor :
-        try:
-            cursor.execute(query, variables)
-        except KeyError as e:
-            fail("Missing variable '{key}'. Specify it in the YAML file or by using the --{key} option"
-                .format(key=e.args[0]))
-        print(dbutils.csvTable(cursor))
 
 if __name__ == '__main__':
     mail()
