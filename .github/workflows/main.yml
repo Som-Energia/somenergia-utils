@@ -13,24 +13,11 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  services:
-    postgres: # Required to run dbutils tests
-      image: postgres:latest
-      env:
-        POSTGRES_DB: somutils_test_db
-        POSTGRES_USER: testdummy
-        POSTGRES_PASSWORD: testdummy_password
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
   build:
     runs-on: ubuntu-latest
     env:
       TRAVIS: 'true' # Skip tests requiring data
+      PGHOST: postgres
       PGDATABASE: somutils_test_db
       PGUSER: testdummy
       PGPASSWORD: testdummy_password
@@ -41,6 +28,21 @@ jobs:
           - '3.8'
           - '3.9'
     name: Python ${{ matrix.python-version }}
+    services:
+      postgres: # Required to run dbutils tests
+        image: postgres:latest
+        env:
+          PGHOST: postgres
+          POSTGRES_DB: somutils_test_db
+          POSTGRES_USER: testdummy
+          POSTGRES_PASSWORD: testdummy_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
