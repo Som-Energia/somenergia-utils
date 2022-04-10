@@ -2,7 +2,31 @@ import unittest
 from yamlns import ns
 from .testutils import sandbox_dir, Path
 from .dbutils import runsql, MissingParameter
+import os
 
+def pgconfig_from_environ():
+    environs = dict(
+        host='PGHOST',
+        user='PGUSER',
+        password='PGPASSWORD',
+        port='PGPORT',
+        database='PGDATABASE',
+        passfile='PGPASSFILE',
+        hostaddr='PGHOSTADDR',
+    )
+    config = dict(
+        (param, value)
+        for param, value in (
+            (param, os.environ.get(var, None))
+            for param, var in environs.items()
+        )
+        if value is not None
+    )
+    return config or dict(database='postgres')
+
+@unittest.skipIf(not pgconfig_from_environ(),
+    "Please specify PGxxx variables to enable those tests"
+)
 class DBUtils_Test(unittest.TestCase):
 
     from yamlns.testutils import assertNsEqual
@@ -12,9 +36,8 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_helloworld(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
+
             self.write('hello.sql',
                 "SELECT 'world' as hello"
             )
@@ -29,10 +52,7 @@ class DBUtils_Test(unittest.TestCase):
     def test_runsql_configfile(self):
         with sandbox_dir() as sandbox:
             self.write('myconfig.py',
-                "psycopg = dict(\n"
-                "  database = 'postgres'\n"
-                ")\n"
-
+                "psycopg = {!r}".format(pgconfig_from_environ())
             )
             self.write('hello.sql',
                 "SELECT 'world' as hello"
@@ -49,10 +69,7 @@ class DBUtils_Test(unittest.TestCase):
     def test_runsql_default_dbconfig(self):
         with sandbox_dir() as sandbox:
             self.write('dbconfig.py',
-                "psycopg = dict(\n"
-                "  database = 'postgres'\n"
-                ")\n"
-
+                "psycopg = {!r}".format(pgconfig_from_environ())
             )
             self.write('hello.sql',
                 "SELECT 'world' as hello"
@@ -67,9 +84,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_parametrized(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
             self.write('hello.sql',
                 "SELECT %(name)s as hello"
             )
@@ -83,9 +98,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_parametrized_list_asArray(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
             self.write('hello.sql',
                 "SELECT %(ids)s as hello"
             )
@@ -102,9 +115,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_parametrized_tuple_asSet(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
             self.write('hello.sql',
                 "SELECT 2 in %(ids)s as hello"
             )
@@ -117,9 +128,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_missingParameter(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
             self.write('hello.sql',
                 "SELECT %(forgottenParameter)s as hello"
             )
@@ -134,9 +143,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_multirow(self):
         with sandbox_dir() as sandbox:
-            config = ns.loads("""
-              database: postgres
-            """)
+            config = pgconfig_from_environ()
             self.write('hello.sql', """\
                 SELECT * FROM (VALUES
                     ('alice', 34),
