@@ -69,7 +69,9 @@ for item in runsql('myquery.sql', **params):
    print(item.id, item.description) # id and description should be columns in the query
 ```
 
-Like `sql2csv` there must exist a config.py file or provide it with the `config` keyword parameter.
+Like `sql2csv` there must exist a config.py file or provide it with the `config` keyword parameter
+
+Parameters are inserted as specified in [psycopg2 documentation](https://www.psycopg.org/docs/usage.html#query-parameters)
 
 TODO: db and cursor parameters to reuse existing ones.
 
