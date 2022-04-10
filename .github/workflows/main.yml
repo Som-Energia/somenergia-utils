@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TRAVIS: 'true' # Skip tests requiring data
-      PGHOST: postgres
+      PGHOST: localhost
       PGDATABASE: somutils_test_db
       PGUSER: testdummy
       PGPASSWORD: testdummy_password
