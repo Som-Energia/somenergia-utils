@@ -32,7 +32,6 @@ jobs:
       postgres: # Required to run dbutils tests
         image: postgres:latest
         env:
-          PGHOST: postgres
           POSTGRES_DB: somutils_test_db
           POSTGRES_USER: testdummy
           POSTGRES_PASSWORD: testdummy_password
