@@ -84,11 +84,7 @@ def erptree(
 
     for context, leaf, fullname in processAttributes(remove):
         with step("Removing", fullname):
-            if type(context) == list:
-                for x in context:
-                    del x[leaf]
-            else:
-                del context[leaf]
+            del context[leaf]
 
     return result
 
@@ -100,7 +96,7 @@ def step(doing, attribute):
     #print(doing, attribute)
     try:
         yield
-    except Exception as e:
+    except Exception as e: # pragma: nocover
         print("Error while", doing, attribute)
         raise
 
