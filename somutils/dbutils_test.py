@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import unittest
 from yamlns import ns
 from .testutils import sandbox_dir, Path
-from .dbutils import runsql, MissingParameter
+from .dbutils import runsql, runsql_cached, MissingParameter
 import os
 import sys
 
@@ -35,6 +35,10 @@ class DBUtils_Test(unittest.TestCase):
 
     def write(self, file, content):
         Path(file).write_text(content, encoding='utf8')
+
+    def assertContent(self, file, expected):
+        content = Path(file).read_text(encoding='utf8')
+        self.assertMultiLineEqual(expected, content)
 
     def test_runsql_helloworld(self):
         with sandbox_dir() as sandbox:
@@ -169,6 +173,85 @@ class DBUtils_Test(unittest.TestCase):
                 points: 29
               - name: cynthia
                 points: 25
+            """)
+
+
+    def test__runsql_cache__firstExecution(self):
+        with sandbox_dir() as sandbox:
+            config = pgconfig_from_environ()
+
+            self.write('hello.sql',
+                "SELECT 'world' as hello"
+            )
+
+            result = runsql_cached('hello.sql', config=config)
+
+            self.assertNsEqual(ns(data=list(result)), """\
+              data:
+              - hello: world
+            """)
+
+            self.assertContent('hello.tsv', (
+                "hello\n"
+                "world\n"
+            ))
+
+    def test__runsql_cache__cacheExists_usesIt(self):
+        with sandbox_dir() as sandbox:
+            config = pgconfig_from_environ()
+
+            self.write('hello.sql',
+                "SELECT 'world' as hello"
+            )
+            self.write('hello.tsv', (
+                "hello\n"
+                "othercontent\n"
+            ))
+
+            result = runsql_cached('hello.sql', config=config)
+
+            self.assertNsEqual(ns(data=list(result)), """\
+              data:
+              - hello: othercontent
+            """)
+
+
+    def test__runsql_cache__force_ignoresCache(self):
+        with sandbox_dir() as sandbox:
+            config = pgconfig_from_environ()
+
+            self.write('hello.sql',
+                "SELECT 'world' as hello"
+            )
+            self.write('hello.tsv', (
+                "hello\n"
+                "othercontent\n"
+            ))
+
+            result = runsql_cached('hello.sql', force=True, config=config)
+
+            self.assertNsEqual(ns(data=list(result)), """\
+              data:
+              - hello: world
+            """)
+
+    def test__runsql_cache__force_ignoresCache(self):
+        with sandbox_dir() as sandbox:
+            config = pgconfig_from_environ()
+
+            self.write('hello.sql',
+                "SELECT 'world' as hello"
+            )
+            self.write('other.tsv', (
+                "hello\n"
+                "othercontent\n"
+            ))
+
+            result = runsql_cached('hello.sql', cachefile='other.tsv', config=config)
+
+            self.assertNsEqual(ns(data=list(result)), """\
+              data:
+              - hello: othercontent
             """)
 
 
