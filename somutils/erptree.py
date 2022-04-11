@@ -6,6 +6,7 @@ def erptree(
         pickName=None, # fk atributes to pick the name
         pickId=None, # fk attributes to pick the id
         anonymize=None, # attributes to anonymize
+        only=None,
         remove=None, # attributes to remove
         head=3, tail=3, # chars to leave when anonymizing
 ):
@@ -25,6 +26,9 @@ def erptree(
     and will ellipse it but 'tail' chars from the end
     and 'head' chars from the beggining.
     - 'remove' will remove the attribute.
+    - 'only' if attributes of a level is specified
+    other attributes in the same level will be excluded
+    unless required for expanding.
     """
 
     def processAttributes(attributes):
@@ -36,28 +40,34 @@ def erptree(
             for context, leaf in  getContext(result, attribute):
                 yield context, leaf, attribute
 
+    only = listify(only)
+
     def attributeFilter(path):
-        return None
-        attributes = childAttributes(path, only)
+        attributes = leavesOf(path, only)
         if not attributes:
             return None
-        return list(sorted(attributes + childAttributes(path, list(expand.keys()))))
+        expanded = childAttributes(path, (expand or {}).keys())
+        return list(sorted(set(attributes + expanded))) or None
 
-    
-    if type(id) in (tuple, list):
-        result = [ns(x) for x in model.read(id, attributeFilter(''))]
-    else:
-        result = ns(model.read(id, attributeFilter('')))
+    def doExpand(path, model, ids):
+        attributes = attributeFilter(path)
+        if type(ids) in (tuple, list, set):
+            return [
+                ns(x) for x in model.read(ids, attributes)
+            ]
+        return ns(model.read(ids, attributes))
+
+    result = doExpand('', model, id)
 
     for context, leaf, fullname in processAttributes(expand):
         with step("Expanding", fullname):
             submodel = expand[fullname]
             oldvalue = context[leaf]
-            attributes = attributeFilter(fullname)
-            if len(oldvalue)==2 and type(oldvalue[1]) == str: # fk
-                context[leaf] = ns(submodel.read(oldvalue[0], attributes))
-            else: # 1:n relation
-                context[leaf] = [ ns(x) for x in submodel.read(oldvalue, attributes)]
+            if len(oldvalue)==2 and type(oldvalue[1]) == str:
+                ids = oldvalue[0] # fk
+            else:
+                ids = oldvalue # one2many
+            context[leaf] = doExpand(fullname, submodel, ids)
 
     for context, leaf, fullname in processAttributes(pickName):
         with step("FK as name", fullname):
@@ -184,29 +194,62 @@ def getContext(o, attribute):
         yield x
 
 
+def leavesOf(objectPath, onlyAttributes):
+    """
+    Returns the attributes which are leaves to objectPath
+    when no such attribute (meaning all attributes)
+
+    >>> attribs = [
+    ...     'attrib1.subattrib11',
+    ...     'attrib1.subattrib12',
+    ...     'attrib2',
+    ... ]
+    >>> leavesOf('', attribs)
+    ['attrib2']
+    >>> leavesOf('attrib1', attribs)
+    ['subattrib11', 'subattrib12']
+    >>> leavesOf('attrib2', attribs)
+    []
+    """
+
+    prefix = objectPath+'.' if objectPath else ''
+    offset = len(prefix)
+    return [
+        item[offset:]
+        for item in onlyAttributes
+        if item.startswith(prefix)
+        and '.' not in item[offset:]
+    ]
+
 def childAttributes(objectPath, attributes):
     """
-    Returns the list of direct attributes specified for the object
+    Returns the direct children of objectPath which are
+    referred in the attributes.
 
     >>> attribs = [
     ...     'attrib1.subattrib11',
     ...     'attrib1.subattrib12',
     ...     'attrib2.subattrib21',
     ...     'attrib2.subattrib22',
+    ...     'attrib3',
     ... ]
     >>> childAttributes('', attribs)
-    ['attrib1', 'attrib2']
+    ['attrib1', 'attrib2', 'attrib3']
     >>> childAttributes('attrib1', attribs)
     ['subattrib11', 'subattrib12']
     >>> childAttributes('attrib3', attribs)
+    []
+    >>> childAttributes('attrib4', attribs)
+    []
     """
 
     prefix = objectPath+'.' if objectPath else ''
+    offset = len(prefix)
     result = set(
-        attribute[len(prefix):].split('.')[0]
-        for attribute in listify(attributes)
+        attribute[offset:].split('.')[0]
+        for attribute in attributes
         if attribute.startswith(prefix)
     )
-    return list(sorted(result)) if result else None
+    return list(sorted(result))
 
 

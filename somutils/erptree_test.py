@@ -16,6 +16,13 @@ class ModelMock:
             return [
                 self.read(id, attribs) for id in ids
             ]
+        data = self.instances[ids]
+        if attribs:
+            return dict(
+                (k,v)
+                for k,v in data.items()
+                if k in attribs
+            )
         return self.instances[ids]
 
 
@@ -52,7 +59,7 @@ class ErpTree_Test(unittest.TestCase):
         dict(
             id=100,
             name="Grunge groups",
-            members=[12,13],
+            members=[13],
         ),
     ])
 
@@ -166,12 +173,6 @@ class ErpTree_Test(unittest.TestCase):
             id: 100
             name: Grunge groups
             members:
-            - id: 12
-              name: Palotes, Perico
-              username: ppalotes
-              address:
-              - 1
-              - 13 Rue Percebe
             - id: 13
               name: Inchains, Alice
               username: alice
@@ -180,7 +181,7 @@ class ErpTree_Test(unittest.TestCase):
               - 32, Road Trip, Seattle
         """)
 
-    def test_singleId_expand_applyExpanded(self):
+    def test_inner_expand_remove_anonymize(self):
         result = erptree(100, self.modelGroup,
             expand={
                 'members': self.modelPerson,
@@ -198,12 +199,6 @@ class ErpTree_Test(unittest.TestCase):
             id: 100
             name: Grunge groups
             members:
-            - id: 12
-              name: Palotes, Perico
-              username: ppalotes
-              address:           # expanded
-                # id: 1          # removed
-                name: 13 ...ebe  # anonymized
             - id: 13
               name: Inchains, Alice
               username: alice
@@ -212,11 +207,125 @@ class ErpTree_Test(unittest.TestCase):
                 name: 32,...tle  # anonymized
         """)
 
-# TODO: only in plain
-# TODO: only in inner
-# TODO: only in one2many
-# TODO: only with expand
-# TODO: only with expand in inner
-# TODO: only with expand in one2many
+    def test_inner_pickName(self):
+        result = erptree(100, self.modelGroup,
+            expand=dict(
+                members=self.modelPerson,
+            ),
+            pickName='members.address',
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            id: 100
+            name: Grunge groups
+            members:
+            - id: 13
+              name: Inchains, Alice
+              username: alice
+              address: 32, Road Trip, Seattle  # name picked
+        """)
+
+    def test_inner_pickId(self):
+        result = erptree(100, self.modelGroup,
+            expand=dict(
+                members=self.modelPerson,
+            ),
+            pickId='members.address',
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            id: 100
+            name: Grunge groups
+            members:
+            - id: 13
+              name: Inchains, Alice
+              username: alice
+              address: 2          # id picked
+        """)
+
+    def test_only(self):
+        result = erptree(100, self.modelGroup,
+            only='name',
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            name: Grunge groups
+        """)
+
+    def test_only_withExpand_includesTheExpand(self):
+        result = erptree(100, self.modelGroup,
+            expand=dict(
+                members=self.modelPerson,
+            ),
+            only='name',
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            name: Grunge groups
+            members:             # this also included
+            - id: 13
+              name: Inchains, Alice
+              username: alice
+              address:
+              - 2
+              - 32, Road Trip, Seattle
+        """)
+
+    def test_only_inner(self):
+        result = erptree(13, self.modelPerson,
+            expand=dict(
+                address=self.modelAddress,
+            ),
+            only="""
+                address.name
+            """,
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            id: 13
+            name: Inchains, Alice
+            username: alice
+            address:
+              name: 32, Road Trip, Seattle   # only this
+        """)
+
+    def test_only_one2many(self):
+        result = erptree(100, self.modelGroup,
+            expand=dict(
+                members=self.modelPerson,
+            ),
+            only="""
+                name
+                members.username
+            """,
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            name: Grunge groups
+            members:             # this
+            - username: alice
+        """)
+
+    def test_only_one2many_with_expand(self):
+        result = erptree(100, self.modelGroup,
+            expand={
+                'members': self.modelPerson,
+                'members.address': self.modelAddress,
+            },
+            only="""
+                name
+                members.username
+                members.address.name
+            """,
+        )
+        self.assertNsEqual(ns(result=result), """
+          result:
+            name: Grunge groups  # only
+            members:             # included because expand
+            - username: alice    # only
+              address:           # included because expand
+                name: 32, Road Trip, Seattle  # only
+        """)
+
 
 
