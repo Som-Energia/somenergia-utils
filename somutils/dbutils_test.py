@@ -4,6 +4,7 @@ from yamlns import ns
 from .testutils import sandbox_dir, Path
 from .dbutils import runsql, MissingParameter
 import os
+import sys
 
 def pgconfig_from_environ():
     environs = dict(
@@ -66,22 +67,27 @@ class DBUtils_Test(unittest.TestCase):
               - hello: world
             """)
 
-    @unittest.skip("Python path must be altered")
     def test_runsql_default_dbconfig(self):
         with sandbox_dir() as sandbox:
-            self.write('dbconfig.py',
-                "psycopg = {!r}".format(pgconfig_from_environ())
-            )
-            self.write('hello.sql',
-                "SELECT 'world' as hello"
-            )
+            oldsyspath = sys.path
+            sys.path = ['.'] + sys.path
+            try:
+                self.write('dbconfig.py',
+                    "psycopg = {!r}".format(pgconfig_from_environ())
+                )
+                self.write('hello.sql',
+                    "SELECT 'world' as hello"
+                )
 
-            result = runsql('hello.sql')
+                result = runsql('hello.sql')
 
-            self.assertNsEqual(ns(data=list(result)), """\
-              data:
-              - hello: world
-            """)
+                self.assertNsEqual(ns(data=list(result)), """\
+                  data:
+                  - hello: world
+                """)
+            finally:
+                sys.path = oldsyspath
+
 
     def test_runsql_parametrized(self):
         with sandbox_dir() as sandbox:
