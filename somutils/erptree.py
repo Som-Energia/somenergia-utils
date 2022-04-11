@@ -33,19 +33,31 @@ def erptree(
         full dotted name.
         """
         for attribute in listify(attributes):
-            for context, leaf in  getContext(target, attribute):
+            for context, leaf in  getContext(result, attribute):
                 yield context, leaf, attribute
 
-    target = ns(model.read(id))
+    def attributeFilter(path):
+        return None
+        attributes = childAttributes(path, only)
+        if not attributes:
+            return None
+        return list(sorted(attributes + childAttributes(path, list(expand.keys()))))
+
+    
+    if type(id) in (tuple, list):
+        result = [ns(x) for x in model.read(id, attributeFilter(''))]
+    else:
+        result = ns(model.read(id, attributeFilter('')))
 
     for context, leaf, fullname in processAttributes(expand):
         with step("Expanding", fullname):
             submodel = expand[fullname]
             oldvalue = context[leaf]
-            if len(oldvalue)==2 and type(oldvalue[1]) == str:
-                context[leaf] = ns(submodel.read(context[leaf][0]))
-            else:
-                context[leaf] = [ ns(x) for x in submodel.read(oldvalue)]
+            attributes = attributeFilter(fullname)
+            if len(oldvalue)==2 and type(oldvalue[1]) == str: # fk
+                context[leaf] = ns(submodel.read(oldvalue[0], attributes))
+            else: # 1:n relation
+                context[leaf] = [ ns(x) for x in submodel.read(oldvalue, attributes)]
 
     for context, leaf, fullname in processAttributes(pickName):
         with step("FK as name", fullname):
@@ -68,7 +80,7 @@ def erptree(
             else:
                 del context[leaf]
 
-    return target
+    return result
 
 from contextlib import contextmanager
 
@@ -171,5 +183,30 @@ def getContext(o, attribute):
     for x in getContext(o[thisStep], remaining[0]):
         yield x
 
+
+def childAttributes(objectPath, attributes):
+    """
+    Returns the list of direct attributes specified for the object
+
+    >>> attribs = [
+    ...     'attrib1.subattrib11',
+    ...     'attrib1.subattrib12',
+    ...     'attrib2.subattrib21',
+    ...     'attrib2.subattrib22',
+    ... ]
+    >>> childAttributes('', attribs)
+    ['attrib1', 'attrib2']
+    >>> childAttributes('attrib1', attribs)
+    ['subattrib11', 'subattrib12']
+    >>> childAttributes('attrib3', attribs)
+    """
+
+    prefix = objectPath+'.' if objectPath else ''
+    result = set(
+        attribute[len(prefix):].split('.')[0]
+        for attribute in listify(attributes)
+        if attribute.startswith(prefix)
+    )
+    return list(sorted(result)) if result else None
 
 
