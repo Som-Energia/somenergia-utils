@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import unittest
 from yamlns import ns
 from .testutils import sandbox_dir, Path
-from .dbutils import runsql, runsql_cached, MissingParameter
+from .dbutils import runsql, runsql_cached, MissingParameter, csvTable
 import os
 import sys
 
@@ -254,4 +254,25 @@ class DBUtils_Test(unittest.TestCase):
               - hello: othercontent
             """)
 
+
+    def test_csvTable(self):
+        with sandbox_dir() as sandbox:
+            import psycopg2
+            config = pgconfig_from_environ()
+            db = psycopg2.connect(**config)
+            with db.cursor() as cursor :
+                cursor.execute("""\
+                    SELECT * FROM (VALUES
+                        ('alice', 34),
+                        ('bob', 29),
+                        ('cynthia', 25))
+                    AS mytable(name, points)
+                """)
+
+                self.assertMultiLineEqual(csvTable(cursor),
+                    "name\tpoints\n"
+                    "alice\t34\n"
+                    "bob\t29\n"
+                    "cynthia\t25"
+                )
 
