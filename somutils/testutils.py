@@ -6,10 +6,7 @@ from contextlib import contextmanager
 import os
 
 from yamlns.testutils import assertNsEqual
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path # Py2
+from .pathlib import Path
 
 # Readable verbose testcase listing
 unittest.TestCase.__str__ = unittest.TestCase.id

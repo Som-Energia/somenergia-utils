@@ -2,11 +2,7 @@ from __future__ import unicode_literals
 
 import unittest
 from yamlns import ns
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path # Py2
-
+from .pathlib import Path
 from .testutils import temp_path
 from .tsv import tsvwrite, tsvread
 

@@ -1,11 +1,6 @@
 from __future__ import unicode_literals
 from yamlns import namespace as ns
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path # Py2
-import csv
-
+from .pathlib import Path
 from .tsv import tsvread, tsvwrite
 from consolemsg import step, fail
 

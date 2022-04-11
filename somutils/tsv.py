@@ -1,10 +1,6 @@
 from __future__ import unicode_literals
 from yamlns import namespace as ns
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib2 import Path # Py2
+from .pathlib import Path
 import csv342 as csv # Py2 compatibility, use plain csv when dropped
 
 def tsvread(file):
