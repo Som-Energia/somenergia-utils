@@ -2,7 +2,14 @@ from __future__ import unicode_literals
 import unittest
 from yamlns import ns
 from .testutils import sandbox_dir, Path
-from .dbutils import runsql, runsql_cached, MissingParameter, csvTable
+from .dbutils import (
+    runsql,
+    runsql_cached,
+    MissingParameter,
+    csvTable,
+    nsList,
+    fetchNs,
+)
 import os
 import sys
 
@@ -255,6 +262,8 @@ class DBUtils_Test(unittest.TestCase):
             """)
 
 
+    # csvTable
+
     def test_csvTable(self):
         with sandbox_dir() as sandbox:
             import psycopg2
@@ -275,4 +284,84 @@ class DBUtils_Test(unittest.TestCase):
                     "bob\t29\n"
                     "cynthia\t25"
                 )
+
+    # fetchNs
+
+    def test_fetchNs(self):
+        with sandbox_dir() as sandbox:
+            import psycopg2
+            config = pgconfig_from_environ()
+            db = psycopg2.connect(**config)
+            with db.cursor() as cursor :
+                cursor.execute("""\
+                    SELECT * FROM (VALUES
+                        ('alice', 34),
+                        ('bob', 29),
+                        ('cynthia', 25))
+                    AS mytable(name, points)
+                """)
+                result = list(fetchNs(cursor))
+
+                self.assertNsEqual(ns(data=result), """\
+                  data:
+                  - name: alice
+                    points: 34
+                  - name: bob
+                    points: 29
+                  - name: cynthia
+                    points: 25
+                """)
+
+    # nsList
+
+    def test_nsList(self):
+        with sandbox_dir() as sandbox:
+            import psycopg2
+            config = pgconfig_from_environ()
+            db = psycopg2.connect(**config)
+            with db.cursor() as cursor :
+                cursor.execute("""\
+                    SELECT * FROM (VALUES
+                        ('alice', 34),
+                        ('bob', 29),
+                        ('cynthia', 25))
+                    AS mytable(name, points)
+                """)
+                result = nsList(cursor)
+
+                self.assertNsEqual(ns(data=result), """\
+                  data:
+                  - name: alice
+                    points: 34
+                  - name: bob
+                    points: 29
+                  - name: cynthia
+                    points: 25
+                """)
+
+    def test_nsList_resultCanBeUsedOnceTheCursorIsClosed(self):
+        with sandbox_dir() as sandbox:
+            import psycopg2
+            config = pgconfig_from_environ()
+            db = psycopg2.connect(**config)
+            with db.cursor() as cursor :
+                cursor.execute("""\
+                    SELECT * FROM (VALUES
+                        ('alice', 34),
+                        ('bob', 29),
+                        ('cynthia', 25))
+                    AS mytable(name, points)
+                """)
+                result = nsList(cursor)
+
+            # outside the "with cursor" block
+            self.assertNsEqual(ns(data=result), """\
+              data:
+              - name: alice
+                points: 34
+              - name: bob
+                points: 29
+              - name: cynthia
+                points: 25
+            """)
 
