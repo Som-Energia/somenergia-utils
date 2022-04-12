@@ -37,8 +37,8 @@ def runsql(sqlfile, config=None, **kwds):
     Returns the result of the posgresql query in sqlfile after subsituting kwds.
     'config' is used as psycopg
     """
-    step(sqlfile)
-    step(kwds)
+    #step(sqlfile)
+    #step(kwds)
     if config is None:
         from dbconfig import psycopg as config
     elif not isinstance(config, dict):
