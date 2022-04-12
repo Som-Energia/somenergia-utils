@@ -1,5 +1,10 @@
 # Change log
 
+## somutils 1.8.1 2022-04-12
+
+- Fix: sql2csv was unable to run
+- Some traces removed
+
 ## somutils 1.8.0 2022-04-11
 
 - new utilities:
