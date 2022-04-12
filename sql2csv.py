@@ -42,12 +42,13 @@ def main():
         warn(variables.dump())
     variables.update(cliargs)
 
+    config = options.get('C', None)
     try:
         tsv.tsvwrite(
-            optarg.get('o', sys.stdout),
+            options.get('o', sys.stdout),
             dbutils.runsql(
                 sqlfile=args[0],
-                configfile=options.C if 'C' in options else None,
+                configfile=config,
                 **variables
             )
         )
