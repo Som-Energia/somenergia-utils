@@ -62,7 +62,7 @@ class DBUtils_Test(unittest.TestCase):
               - hello: world
             """)
 
-    def test_runsql_configfile(self):
+    def test_runsql_custom_configfile(self):
         with sandbox_dir() as sandbox:
             self.write('myconfig.py',
                 "psycopg = {!r}".format(pgconfig_from_environ())
@@ -80,25 +80,19 @@ class DBUtils_Test(unittest.TestCase):
 
     def test_runsql_default_dbconfig(self):
         with sandbox_dir() as sandbox:
-            oldsyspath = sys.path
-            sys.path = ['.'] + sys.path
-            try:
-                self.write('dbconfig.py',
-                    "psycopg = {!r}".format(pgconfig_from_environ())
-                )
-                self.write('hello.sql',
-                    "SELECT 'world' as hello"
-                )
+            self.write('dbconfig.py',
+                "psycopg = {!r}".format(pgconfig_from_environ())
+            )
+            self.write('hello.sql',
+                "SELECT 'world' as hello"
+            )
 
-                result = runsql('hello.sql')
+            result = runsql('hello.sql')
 
-                self.assertNsEqual(ns(data=list(result)), """\
-                  data:
-                  - hello: world
-                """)
-            finally:
-                sys.path = oldsyspath
-
+            self.assertNsEqual(ns(data=list(result)), """\
+              data:
+              - hello: world
+            """)
 
     def test_runsql_parametrized(self):
         with sandbox_dir() as sandbox:

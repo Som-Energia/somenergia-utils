@@ -39,9 +39,9 @@ def runsql(sqlfile, config=None, **kwds):
     """
     #step(sqlfile)
     #step(kwds)
-    if config is None:
-        from dbconfig import psycopg as config
-    elif not isinstance(config, dict):
+    import sys
+    if not isinstance(config, dict):
+        config = config or 'dbconfig.py'
         import imp
         config = imp.load_source('config', config)
         config = config.psycopg
