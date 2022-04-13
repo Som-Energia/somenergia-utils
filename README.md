@@ -165,7 +165,7 @@ Also keys in dicts are alphabetically sorted.
 
 ## `testutils.destructiveTest`
 
-An utility to avoid running destrutive tests in production.
+An utility to avoid running destrutive tests in a production OpenERP.
 It is a decorator that checks wheter the erp configured in `dbconfig`
 has the testing flag and skips the test if it doesn't.
 
@@ -182,6 +182,11 @@ Module for simplified isodate parsing and timezone handling.
 Interprets strings like the ones the standard Print Dialog
 uses to specify pages to be printed.
 ie. "2,4,6-9,13" means "2, 4, from 6 to 9 and 13"
+
+```python
+>>> [x for x in sequence("2,4,6-9,13")]
+[2, 4, 6, 7, 8, 9, 13]
+```
 
 ## `erptree`
 
