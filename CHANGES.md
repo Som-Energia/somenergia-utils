@@ -1,8 +1,13 @@
 # Change log
 
+## somutils 1.8.2 2022-04-12
+
+- `pgconfig_from_environ` added to use standard pqsl env vars as means of configuration
+- `pgconfig_from_environ` custom var prefixes to enable multiple databases
+
 ## somutils 1.8.1 2022-04-12
 
-- Fix: sql2csv was unable to run
+- Fix: sql2csv refered to an unexisting variable
 - Some traces removed
 
 ## somutils 1.8.0 2022-04-11
