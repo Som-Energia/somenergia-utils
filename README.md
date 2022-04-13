@@ -19,7 +19,8 @@ but with no entity by themselves to have their own repository.
 	- `runsql_cached`: like runsql but cache the results in a tsv file to avoid second runs
 	- `fetchNs`: a generator that wraps db cursors to fetch objects with attributes instead of psycopg arrays
 	- `nsList`: uses the former to build a list of such object (slower but maybe convinient)
-	- `csvTable`: turns the results of a query into a tab separated table with proper header names
+	- `csvTable`: [deprecated, use runsql] turns the results of a query into a tab separated table with proper header names
+	- `pgconfig_from_environ`: constructs a db connection configuration dictionary from PG environment variables
 - `isodates`: String to time/date/datetime objects with naive/timezoned handling
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
@@ -75,12 +76,12 @@ Parameters are inserted as specified in [psycopg2 documentation](https://www.psy
 
 TODO: db and cursor parameters to reuse existing ones.
 
-If you know the results will be always the same, you can use `runsql_cache` instead.
+If you know the results will be always the same, you can use `runsql_cached` instead.
 It will generate a tsv file name like the sql file with the results,
 and will use it instead of the query for next executions.
 
-The usage of `runsql_cache` is quite similar to `runsql` to be exchangeable.
-`runsql_cache` just adds a couple of keyword arguments.
+The usage of `runsql_cached` is quite similar to `runsql` to be exchangeable.
+`runsql_cached` just adds a couple of keyword arguments.
 
 - `cachefile`: to override the default cache file (a name, a path or a file like object)
 - `force`: to force the query execution even if the cache exists
