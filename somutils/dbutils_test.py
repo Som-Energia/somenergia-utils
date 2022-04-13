@@ -42,11 +42,8 @@ class DBUtils_Test(unittest.TestCase):
                 database: postgres
             """)
         finally:
-            print("cony")
             self.clearPgEnviron()
             os.environ.update(old_pg_vars)
-            print(list(sorted(os.environ)))
-            print(list(sorted(old_pg_vars)))
 
     def test_pgconfig_from_environ__partial_set(self):
         old_pg_vars = self.clearPgEnviron()
@@ -62,11 +59,8 @@ class DBUtils_Test(unittest.TestCase):
                 passfile: mypassfile.txt
             """)
         finally:
-            print("cony")
             self.clearPgEnviron()
             os.environ.update(old_pg_vars)
-            print(list(sorted(os.environ)))
-            print(list(sorted(old_pg_vars)))
 
     def test_pgconfig_from_environ__complete_set(self):
         old_pg_vars = self.clearPgEnviron()
