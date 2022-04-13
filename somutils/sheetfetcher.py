@@ -13,9 +13,11 @@ class SheetFetcher():
         try:
             credentials = Credentials.from_service_account_file(
                 credentialFilename,
-                scopes=['https://spreadsheets.google.com/feeds',
-                        'https://www.googleapis.com/auth/drive',],
-                )
+                scopes=[
+                    'https://spreadsheets.google.com/feeds',
+                    'https://www.googleapis.com/auth/drive',
+                ],
+            )
         except Exception as e:
             fail(str(e))
 
@@ -24,11 +26,12 @@ class SheetFetcher():
             self.doc = gc.open(documentName)
         except Exception as e:
             credentialContent = json.load(io.open(credentialFilename))
-            error("No s'ha trobat el document, o no li has donat permisos a l'aplicacio")
-            error("Cal compartir el document '{}' amb el següent correu:"
-                .format(documentName,credentialContent['client_email']))
-            error(str(e))
-            sys.exit(-1)
+            fail(
+                "No s'ha trobat el document, o no li has donat permisos a l'aplicacio\n"
+                "Cal compartir el document '{}' amb el següent correu: {}\n"
+                "{}"
+                .format(documentName,credentialContent['client_email'], e)
+            )
 
     def _worksheet(self, selector):
         if type(selector) is int:
