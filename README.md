@@ -201,26 +201,29 @@ O = Client(....)
 
 partner = erptree(partnerAddress_id, O.ResPartnerAddress,
 	expand = {
+		# Will expand those attributes
 		'partner_id': O.ResPartner,
 		'partner_id.company': O.ResPartner,
 	},
 	pickName = [
+		# For those fk pick the name instead of the default id,name tuple (pickId does the analog)
 		'partner_id.state_id',
 		'partner_id.country_id',
 	],
 	anonymize = [
+		# Will tamper the value
 		'email',
 	],
 	remove = [
+		# Means clear this field
 		'superfluous_field',
 	],
+	only = [
+		 # Means: just retrieve name and code from partner_id.company
+		'partner_id.company.name',
+		'partner_id.company.code',
+	],
 )
-	
 ```
-
-
-
-
-
 
 
