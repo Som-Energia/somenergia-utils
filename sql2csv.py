@@ -41,14 +41,13 @@ def main():
         variables = ns.load(args[1])
         warn(variables.dump())
     variables.update(cliargs)
-
     config = options.get('C', None)
     try:
         tsv.tsvwrite(
             options.get('o', sys.stdout),
             dbutils.runsql(
                 sqlfile=args[0],
-                configfile=config,
+                config=config,
                 **variables
             )
         )
