@@ -30,7 +30,7 @@ class DBUtils_Test(unittest.TestCase):
 
     def clearPgEnviron(self, prefix='PG'):
         safe = {}
-        for var in os.environ:
+        for var in list(os.environ): # Py2 mutating dict
             if var.startswith(prefix):
                 safe[var] = os.environ.pop(var)
         return safe
