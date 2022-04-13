@@ -1,6 +1,10 @@
 # Change log
 
-## somutils 1.8.2 2022-04-12
+## somutils 1.8.3 2022-04-13
+
+- py2 tests fixed (mutating looping dict)
+
+## somutils 1.8.2 2022-04-13
 
 - `pgconfig_from_environ` added to use standard pqsl env vars as means of configuration
 - `pgconfig_from_environ` custom var prefixes to enable multiple databases
