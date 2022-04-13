@@ -3,6 +3,33 @@ from yamlns import namespace as ns
 from .pathlib import Path
 from .tsv import tsvread, tsvwrite
 from consolemsg import step, fail
+import os
+
+def pgconfig_from_environ(prefix='PG'):
+    """
+    Constructs a configuration for runsql from psql environment variables.
+    https://www.postgresql.org/docs/current/libpq-envars.html
+    You can provide a different prefix from the PG standard to enable
+    configuration of different databases.
+    """
+    environs = dict(
+        host=prefix+'HOST',
+        user=prefix+'USER',
+        password=prefix+'PASSWORD',
+        port=prefix+'PORT',
+        database=prefix+'DATABASE',
+        passfile=prefix+'PASSFILE',
+        hostaddr=prefix+'HOSTADDR',
+    )
+    config = dict(
+        (param, value)
+        for param, value in (
+            (param, os.environ.get(var, None))
+            for param, var in environs.items()
+        )
+        if value is not None
+    )
+    return config or dict(database='postgres')
 
 def fetchNs(cursor):
 	"""

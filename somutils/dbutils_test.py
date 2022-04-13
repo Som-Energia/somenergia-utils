@@ -9,29 +9,10 @@ from .dbutils import (
     csvTable,
     nsList,
     fetchNs,
+    pgconfig_from_environ,
 )
 import os
 import sys
-
-def pgconfig_from_environ():
-    environs = dict(
-        host='PGHOST',
-        user='PGUSER',
-        password='PGPASSWORD',
-        port='PGPORT',
-        database='PGDATABASE',
-        passfile='PGPASSFILE',
-        hostaddr='PGHOSTADDR',
-    )
-    config = dict(
-        (param, value)
-        for param, value in (
-            (param, os.environ.get(var, None))
-            for param, var in environs.items()
-        )
-        if value is not None
-    )
-    return config or dict(database='postgres')
 
 @unittest.skipIf(not pgconfig_from_environ(),
     "Please specify PGxxx variables to enable those tests"
@@ -46,6 +27,97 @@ class DBUtils_Test(unittest.TestCase):
     def assertContent(self, file, expected):
         content = Path(file).read_text(encoding='utf8')
         self.assertMultiLineEqual(expected, content)
+
+    def clearPgEnviron(self, prefix='PG'):
+        safe = {}
+        for var in os.environ:
+            if var.startswith(prefix):
+                safe[var] = os.environ.pop(var)
+        return safe
+
+    def test_pgconfig_from_environ__empty__default(self):
+        old_pg_vars = self.clearPgEnviron()
+        try:
+            self.assertNsEqual(pgconfig_from_environ(), """
+                database: postgres
+            """)
+        finally:
+            print("cony")
+            self.clearPgEnviron()
+            os.environ.update(old_pg_vars)
+            print(list(sorted(os.environ)))
+            print(list(sorted(old_pg_vars)))
+
+    def test_pgconfig_from_environ__partial_set(self):
+        old_pg_vars = self.clearPgEnviron()
+        try:
+            os.environ.update(
+                PGUSER = 'myuser',
+                PGHOST = 'myhost',
+                PGPASSFILE = 'mypassfile.txt',
+            )
+            self.assertNsEqual(pgconfig_from_environ(), """
+                user: myuser
+                host: myhost
+                passfile: mypassfile.txt
+            """)
+        finally:
+            print("cony")
+            self.clearPgEnviron()
+            os.environ.update(old_pg_vars)
+            print(list(sorted(os.environ)))
+            print(list(sorted(old_pg_vars)))
+
+    def test_pgconfig_from_environ__complete_set(self):
+        old_pg_vars = self.clearPgEnviron()
+        try:
+            os.environ.update(
+                PGHOST = 'myhost',
+                PGUSER = 'myuser',
+                PGPASSWORD = 'mypassword',
+                PGPORT = '8034',
+                PGDATABASE= 'mydatabase',
+                PGPASSFILE = 'mypassfile.txt',
+                PGHOSTADDR = '8.8.8.8',
+            )
+            self.assertNsEqual(pgconfig_from_environ(), """
+                database: mydatabase
+                user: myuser
+                password: mypassword
+                host: myhost
+                port: '8034'
+                passfile: mypassfile.txt
+                hostaddr: 8.8.8.8
+            """)
+        finally:
+            self.clearPgEnviron()
+            os.environ.update(old_pg_vars)
+
+    def test_pgconfig_from_environ__customPrefix(self):
+        old_pg_vars = self.clearPgEnviron()
+        try:
+            os.environ.update(
+                MYDB_HOST = 'myhost',
+                MYDB_USER = 'myuser',
+                MYDB_PASSWORD = 'mypassword',
+                MYDB_PORT = '8034',
+                MYDB_DATABASE= 'mydatabase',
+                MYDB_PASSFILE = 'mypassfile.txt',
+                MYDB_HOSTADDR = '8.8.8.8',
+            )
+            self.assertNsEqual(pgconfig_from_environ('MYDB_'), """
+                database: mydatabase
+                user: myuser
+                password: mypassword
+                host: myhost
+                port: '8034'
+                passfile: mypassfile.txt
+                hostaddr: 8.8.8.8
+            """)
+        finally:
+            self.clearPgEnviron()
+            self.clearPgEnviron(prefix='MYDB_')
+            os.environ.update(old_pg_vars)
 
     def test_runsql_helloworld(self):
         with sandbox_dir() as sandbox:
