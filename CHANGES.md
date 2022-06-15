@@ -3,7 +3,7 @@
 ## somutils 1.8.4 2022-06-15
 
 - Documentation updated
-- py2: certifi droppet py2
+- py2: certifi and requests dropped py2
 
 ## somutils 1.8.3 2022-04-13
 
