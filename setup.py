@@ -52,6 +52,7 @@ setup(
         'httplib2<0.18',
         'pathlib2',
         'pyyaml<6',
+        'certifi<2022-05-18', # Py2, indirect of request
         ] if py2 else [
         'google-auth',
         'PyOpenSSL',
