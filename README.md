@@ -162,6 +162,59 @@ The comparision is done on the YAML output so that differences are
 spoted as text diffs.
 Also keys in dicts are alphabetically sorted.
 
+**This assertion has been moved to `yamlns.testutils`**.
+`yamlns.testutils` also provides `assertNsContains`
+
+And `yamlns.pytestutils` provides the equivalents for pytest
+
+- `assert_ns_equal`
+- `assert_ns_contains`
+
+Also those pytest fixtures:
+
+- `test_name` fixture
+- `text_snapshot` fixture
+- `yaml_snapshot` fixture
+
+## `testutils.temp_path`
+
+Context handler that creates a temporary directory and ensures
+it is deleted after exiting the context.
+
+```python
+with testutils.temp_path() as tmp:
+    # The folder will exist while you are in the context
+    # You can use tmp as path
+    with (tmp/"myfile").open() as f:
+        f.write("yep")
+# No trace of the folder after the context
+```
+## `testutils.working_dir`
+
+Changes the working dir while the context is active,
+and recovers the former working dir afterwards.
+
+```python
+with testutils.working_dir("this/other/folder"):
+    print(os.get_cwd()) # here we are in this/other/folder
+print(os.get_cwd()) # here we are back to our previous working dir
+```
+
+## `testutils.sandbox_dir`
+
+Combines the former two context handlers to create
+a temporary directory, set it as current working dir
+and after the context ends, restore the working dir
+and clean up the temporary folder.
+
+
+```python
+with testutils.sandbox_dir() as sandbox:
+    # There you use tmp folder as path
+    with Path("myfile").open() as f:
+        f.write("yep")
+# No trace of the folder after the context
+```
 
 ## `testutils.destructiveTest`
 
