@@ -25,6 +25,7 @@ but with no entity by themselves to have their own repository.
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`
 - `testutils`: module with common test utilities
+	- `testutils.enterContext`: (Py<3.11 polyfill) enters a context handler from setUp() ensuring is exited on teardown
 	- `testutils.destructiveTest`: decorator to avoid running destructive tests in production
 	- `testutils.temp_path`: context manager that provides a selfdestructing temporary directory for tests
 	- `testutils.working_dir`: context manager that changes the current working directory and restores it afterwards
@@ -154,18 +155,21 @@ factorial(6)
 
 ```
 
-## `testutils.assertNsEqual`
+## Custom assertions `testutils.assertNsEqual` and friends
 
-Allows to assert equality on json/yaml like structures combining
+**These assertion has been moved to `yamlns.testutils` and `yamlns.pytestutils`**.
+To maintain compatibility those imports cna also found in `somutils.testutils`.
+
+`assertNsEqual` allows to assert equality on json/yaml like structures combining
 dicts, lists, numbers, strings, dates...
-The comparision is done on the YAML output so that differences are
-spoted as text diffs.
-Also keys in dicts are alphabetically sorted.
 
-**This assertion has been moved to `yamlns.testutils`**.
+After normalizing the structure (sorting dict keys),
+the comparision is done on the YAML output so
+that differences are spoted as text diffs.
 `yamlns.testutils` also provides `assertNsContains`
+which ignores additional keys in the second parameter.
 
-And `yamlns.pytestutils` provides the equivalents for pytest
+`yamlns.pytestutils` provides the equivalents for pytest
 
 - `assert_ns_equal`
 - `assert_ns_contains`
@@ -189,6 +193,28 @@ with testutils.temp_path() as tmp:
         f.write("yep")
 # No trace of the folder after the context
 ```
+
+## `testutils.enterContext`
+
+Allows to open context handlers in `setUp` that
+get properly closed on teardown.
+This allows using context handlers as quick selfdestroying fixtures.
+
+It is a polyfill of the homonimous method introduced in Python 3.11.
+
+Usage:
+
+```python
+from somutils.testutils import enterContext
+class MyTest(unittest.TestCase):
+	if not hasattr(unittest.TestCase, 'enterContext'):
+		enterContext = enterContext
+
+	def setUp(self):
+		self.file = self.enterContext(open('myfile'))
+		# on teardown, the file is closed
+```
+
 ## `testutils.working_dir`
 
 Changes the working dir while the context is active,
