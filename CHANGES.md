@@ -1,5 +1,11 @@
 # Change log
 
+## somutils 1.9.0 2023-09-11
+
+- Added testutils.enterContext, a polyfill for
+  unittest.TestCase.enterContext introduced in Python 3.11.
+  Eases the use of context handlers in setUp.
+
 ## somutils 1.8.5 2022-06-15
 
 - py2: requests dropped py2
