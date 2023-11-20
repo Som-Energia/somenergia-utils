@@ -1,5 +1,9 @@
 # Change log
 
+## somutils 1.9.1 2023-11-20
+
+- Fix requirement 'google-auth' not working for py2
+
 ## somutils 1.9.0 2023-09-11
 
 - Added testutils.enterContext, a polyfill for
