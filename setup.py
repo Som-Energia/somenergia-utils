@@ -39,7 +39,7 @@ setup(
         'csv342', # Py2/3 compatibility
         ] + ([
         'gspread<4', # Py2 dropped
-        'google-auth<=1.34', # Py2 dropped
+        'google-auth<1.35.0', # Py2 dropped
         'google-auth-oauthlib<0.4.2', # Py2 dropped
         'oauthlib<3', # Py2 dropped
         'requests-oauthlib<1.2', # Py2 dropped
