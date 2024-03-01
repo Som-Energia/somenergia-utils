@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on pull request events
   pull_request:
-    branches: [ master ]
+    branches: [ py2 ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,12 +21,11 @@ jobs:
       PGDATABASE: somutils_test_db
       PGUSER: testdummy
       PGPASSWORD: testdummy_password
+      BRANCH: ${{ github.ref }}
     strategy:
       matrix:
         python-version:
           - '2.7'
-          - '3.8'
-          - '3.9'
     name: Python ${{ matrix.python-version }}
     services:
       postgres: # Required to run dbutils tests
@@ -48,13 +47,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-      - name: Set up Python ${{ matrix.python-version }}
-        if: matrix.python-version != '2.7'
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Set up Python 2.7
-        if: matrix.python-version == '2.7'
         run: |
           sudo apt-get update
           sudo apt-get install -y python2.7 python2.7-dev

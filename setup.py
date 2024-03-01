@@ -9,7 +9,8 @@ py2 = sys.version_info < (3,)
 
 setup(
     name = "somutils",
-    version = "1.9.1",
+    version = "1.8.9",
+    python_requires='<3',
     description = "Tools we use at Somenergia and can be useful",
     author = u"César López Ramírez",
     author_email = "cesar.lopez@somenergia.coop",
