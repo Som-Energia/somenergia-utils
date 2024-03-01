@@ -4,9 +4,9 @@ name: CI
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events
-  push:
+  # Triggers the workflow on pull request events
   pull_request:
+    branches: [ py2 ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,12 +21,11 @@ jobs:
       PGDATABASE: somutils_test_db
       PGUSER: testdummy
       PGPASSWORD: testdummy_password
+      BRANCH: ${{ github.ref }}
     strategy:
       matrix:
         python-version:
-          #- '2.7'
-          - '3.8'
-          - '3.9'
+          - '2.7'
     name: Python ${{ matrix.python-version }}
     services:
       postgres: # Required to run dbutils tests
@@ -45,13 +44,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-#      - name: Install system dependencies
-#        run: |
-#          sudo apt install gcc libffi-dev libssl-dev nodejs npm libyaml-dev libxslt1-dev
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          ref: ${{ github.head_ref }}
+      - name: Set up Python 2.7
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python2.7 python2.7-dev
+          sudo ln -sf python2.7 /usr/bin/python
+          curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+          python get-pip.py
+          rm get-pip.py
+          pip install --upgrade pip setuptools wheel
       - uses: BSFishy/pip-action@v1
         with:
           packages: |

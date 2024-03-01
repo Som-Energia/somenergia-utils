@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import unittest
-from contextlib import contextmanager, ExitStack
+from contextlib import contextmanager
 import os
 
 from yamlns.testutils import assertNsEqual
@@ -131,24 +131,5 @@ def sandbox_dir():
         with working_dir(path):
             yield path
 
-def enterContext(self, resource):
-    """
-    Polyfill for unittest.TestCase.enterContext introduced in Python 3.11.
-
-    It opens the context handler in setUp that will be exited on teardown
-    even if errors occur.
-
-    class MyTestClass(unittest.TestCase):
-
-        from somutils.testutils import enterContext
-
-        def setUp(self):
-            self.sandbox = self.enterContext(sandbox_dir())
-
-    """
-    with ExitStack() as stack:
-        handler = stack.enter_context(resource)
-        self.addCleanup(stack.pop_all().close)
-        return handler
 
 # vim: ts=4 sw=4 et
