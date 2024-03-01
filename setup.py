@@ -35,7 +35,6 @@ setup(
         'yamlns>=0.7',
         'consolemsg',
         'pytz',
-        'python-dateutil',
         'csv342', # Py2/3 compatibility
         ] + ([
         'gspread<4', # Py2 dropped
@@ -54,12 +53,14 @@ setup(
         'pyyaml<6',
         'certifi<2022-05-18', # Py2, indirect of request
         'requests<2.28', # Py2, dropped
+        'python-dateutil<=2.8.2', # Py2 dropped
         ] if py2 else [
         'google-auth',
         'PyOpenSSL',
         'psycopg2-binary',
         'decorator',
         'gspread>=4',
+        'python-dateutil>=2.9.0'
         ]),
     classifiers = [
         'Programming Language :: Python',
