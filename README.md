@@ -96,7 +96,8 @@ Convenient cursor wrappers to make the database access code more readable.
 Example:
 
 ```python
-import psycopg2, dbutils
+import psycopg2
+from somutils import dbutils
 db = psycopg2.connect(**dbconfiguration)
 with db.cursor() as cursor :
 	cursor.execute("SELECT name, age FROM people")
@@ -110,7 +111,7 @@ with db.cursor() as cursor :
 Convenient wraper for gdrive.
 
 ```python
-from sheetfetcher import SheetFetcher
+from somutils.sheetfetcher import SheetFetcher
 
 fetcher = SheetFetcher(
 	documentName='My Document',
@@ -131,7 +132,7 @@ This decorator is a fast helper to trace calls to functions and methods.
 It will show the name of the functions the values of the parameters and the returned values.
 
 ```python
-from trace import trace
+from somutils.trace import trace
 
 @trace
 def factorial(n):
