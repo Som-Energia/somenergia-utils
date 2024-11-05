@@ -215,7 +215,7 @@ class DBUtils_Test(unittest.TestCase):
                 result = runsql('hello.sql', config=config)
                 list(result) # fetch to force load
 
-            self.assertEquals(format(ctx.exception),
+            self.assertEqual(format(ctx.exception),
                 "forgottenParameter"
             )
 
