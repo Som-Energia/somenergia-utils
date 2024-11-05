@@ -60,7 +60,8 @@ setup(
         'psycopg2-binary',
         'decorator',
         'gspread>=4',
-        'python-dateutil>=2.9.0'
+        'python-dateutil>=2.9.0',
+        'contextlib2', # ExitStack compatibility
         ]),
     classifiers = [
         'Programming Language :: Python',

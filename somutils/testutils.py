@@ -2,7 +2,11 @@
 
 from __future__ import unicode_literals
 import unittest
-from contextlib import contextmanager, ExitStack
+from contextlib import contextmanager
+try:
+    from contextlib import ExitStack
+except ImportError:
+    from contextlib2 import ExitStack
 import os
 
 from yamlns.testutils import assertNsEqual
