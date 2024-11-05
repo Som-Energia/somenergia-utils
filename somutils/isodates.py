@@ -23,6 +23,7 @@ def toLocal(date):
 
 def parseLocalTime(string, isSummer=False, format="%Y-%m-%d %H:%M:%S"):
     naive = datetime.datetime.strptime(string, format)
+    # TODO: try the is_dst parameter of localize
     localized = tz.localize(naive)
     if not isSummer: return localized
     if localized.dst(): return localized

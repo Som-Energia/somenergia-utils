@@ -1,5 +1,10 @@
 # Change log
 
+## somutils 1.10.0 2024-11-05
+
+- Back support for python from 2.7 to 3.12
+- New somutils.config module to load python configurations in a portable way
+
 ## somutils 1.9.1 2023-11-20
 
 - Fix requirement 'google-auth' not working for py2
