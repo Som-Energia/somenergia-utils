@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 from .testutils import sandbox_dir
 from .config import load_py_config
