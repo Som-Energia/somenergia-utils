@@ -21,6 +21,8 @@ but with no entity by themselves to have their own repository.
 	- `nsList`: uses the former to build a list of such object (slower but maybe convinient)
 	- `csvTable`: [deprecated, use runsql] turns the results of a query into a tab separated table with proper header names
 	- `pgconfig_from_environ`: constructs a db connection configuration dictionary from PG environment variables
+- `config`: configuration utils
+	- `load_py_config` load a python file as configuration file
 - `isodates`: String to time/date/datetime objects with naive/timezoned handling
 - `sheetfetcher.py`: convenience class to retrieve data from gdrive spreadshets
 - `trace`: quickly enable and disable tracing function calling by decorating them with `@trace`

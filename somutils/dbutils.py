@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from yamlns import namespace as ns
 from .pathlib import Path
 from .tsv import tsvread, tsvwrite
+from .config import load_py_config
 from consolemsg import step, fail
 import os
 
@@ -69,8 +70,7 @@ def runsql(sqlfile, config=None, **kwds):
     import sys
     if not isinstance(config, dict):
         config = config or 'dbconfig.py'
-        import imp
-        config = imp.load_source('config', config)
+        config = load_py_config(config)
         config = config.psycopg
 
     sql = Path(sqlfile).read_text(encoding='utf8')
